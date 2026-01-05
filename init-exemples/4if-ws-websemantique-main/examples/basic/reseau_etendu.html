@@ -1,0 +1,164 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 750px;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#ff4d4d", "font": {"color": "white"}, "id": "Mehdi Kaytoue", "label": "Mehdi Kaytoue", "shape": "dot", "size": 35, "title": "Mehdi Kaytoue"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "Zainab Assaghir", "label": "Zainab Assaghir", "shape": "dot", "size": 15, "title": "Zainab Assaghir"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "Amedeo Napoli", "label": "Amedeo Napoli", "shape": "dot", "size": 15, "title": "Amedeo Napoli"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "Youcef Remil", "label": "Youcef Remil", "shape": "dot", "size": 15, "title": "Youcef Remil"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "Romain Mathonat", "label": "Romain Mathonat", "shape": "dot", "size": 15, "title": "Romain Mathonat"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "Jean-Fran\u00e7ois Boulicaut", "label": "Jean-Fran\u00e7ois Boulicaut", "shape": "dot", "size": 15, "title": "Jean-Fran\u00e7ois Boulicaut"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "Marc Plantevit", "label": "Marc Plantevit", "shape": "dot", "size": 15, "title": "Marc Plantevit"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "C. Robardet", "label": "C. Robardet", "shape": "dot", "size": 15, "title": "C. Robardet"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "Victor Codocedo", "label": "Victor Codocedo", "shape": "dot", "size": 15, "title": "Victor Codocedo"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "Chedy Ra\u00efssi", "label": "Chedy Ra\u00efssi", "shape": "dot", "size": 15, "title": "Chedy Ra\u00efssi"}, {"color": "#4d94ff", "font": {"color": "white"}, "id": "Guillaume Bosc", "label": "Guillaume Bosc", "shape": "dot", "size": 15, "title": "Guillaume Bosc"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Miguel Couceiro", "label": "Miguel Couceiro", "shape": "dot", "size": 15, "title": "Miguel Couceiro"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Alexandre Bazin", "label": "Alexandre Bazin", "shape": "dot", "size": 15, "title": "Alexandre Bazin"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Pierre Monnin", "label": "Pierre Monnin", "shape": "dot", "size": 15, "title": "Pierre Monnin"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Adrien Coulet", "label": "Adrien Coulet", "shape": "dot", "size": 15, "title": "Adrien Coulet"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Fr\u00e9d\u00e9ric Pennerath", "label": "Fr\u00e9d\u00e9ric Pennerath", "shape": "dot", "size": 15, "title": "Fr\u00e9d\u00e9ric Pennerath"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "B\u00e9atrice Fuchs", "label": "B\u00e9atrice Fuchs", "shape": "dot", "size": 15, "title": "B\u00e9atrice Fuchs"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Jean Lieber", "label": "Jean Lieber", "shape": "dot", "size": 15, "title": "Jean Lieber"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Alain Mille", "label": "Alain Mille", "shape": "dot", "size": 15, "title": "Alain Mille"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Marie-Dominique Devignes", "label": "Marie-Dominique Devignes", "shape": "dot", "size": 15, "title": "Marie-Dominique Devignes"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Amine Mohamed Rouane Hacene", "label": "Amine Mohamed Rouane Hacene", "shape": "dot", "size": 15, "title": "Amine Mohamed Rouane Hacene"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Marianne Huchard", "label": "Marianne Huchard", "shape": "dot", "size": 15, "title": "Marianne Huchard"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Petko Valtchev", "label": "Petko Valtchev", "shape": "dot", "size": 15, "title": "Petko Valtchev"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Tatiana Makhalova", "label": "Tatiana Makhalova", "shape": "dot", "size": 15, "title": "Tatiana Makhalova"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Sergei O. Kuznetsov", "label": "Sergei O. Kuznetsov", "shape": "dot", "size": 15, "title": "Sergei O. Kuznetsov"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Aleksey Buzmakov", "label": "Aleksey Buzmakov", "shape": "dot", "size": 15, "title": "Aleksey Buzmakov"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "J\u00e9r\u00f4me Euzenat", "label": "J\u00e9r\u00f4me Euzenat", "shape": "dot", "size": 15, "title": "J\u00e9r\u00f4me Euzenat"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Yannick Toussaint", "label": "Yannick Toussaint", "shape": "dot", "size": 15, "title": "Yannick Toussaint"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Florence Le Ber", "label": "Florence Le Ber", "shape": "dot", "size": 15, "title": "Florence Le Ber"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Nyoman Juniarta", "label": "Nyoman Juniarta", "shape": "dot", "size": 15, "title": "Nyoman Juniarta"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Justine Reynaud", "label": "Justine Reynaud", "shape": "dot", "size": 15, "title": "Justine Reynaud"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "S\u00e9bastien Duplessis", "label": "S\u00e9bastien Duplessis", "shape": "dot", "size": 15, "title": "S\u00e9bastien Duplessis"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Malika Sma\u00efl-Tabbone", "label": "Malika Sma\u00efl-Tabbone", "shape": "dot", "size": 15, "title": "Malika Sma\u00efl-Tabbone"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Mehwish Alam", "label": "Mehwish Alam", "shape": "dot", "size": 15, "title": "Mehwish Alam"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Mathieu D\u2019aquin", "label": "Mathieu D\u2019aquin", "shape": "dot", "size": 15, "title": "Mathieu D\u2019aquin"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Nizar Messai", "label": "Nizar Messai", "shape": "dot", "size": 15, "title": "Nizar Messai"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Laszlo Szathmary", "label": "Laszlo Szathmary", "shape": "dot", "size": 15, "title": "Laszlo Szathmary"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Emmanuel Nauer", "label": "Emmanuel Nauer", "shape": "dot", "size": 15, "title": "Emmanuel Nauer"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Elias Egho", "label": "Elias Egho", "shape": "dot", "size": 15, "title": "Elias Egho"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Nicolas Jay", "label": "Nicolas Jay", "shape": "dot", "size": 15, "title": "Nicolas Jay"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Rim Al Hulou", "label": "Rim Al Hulou", "shape": "dot", "size": 15, "title": "Rim Al Hulou"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Christophe Rigotti", "label": "Christophe Rigotti", "shape": "dot", "size": 15, "title": "Christophe Rigotti"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Nazha Selmaoui-Folcher", "label": "Nazha Selmaoui-Folcher", "shape": "dot", "size": 15, "title": "Nazha Selmaoui-Folcher"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Olivier Gandrillon", "label": "Olivier Gandrillon", "shape": "dot", "size": 15, "title": "Olivier Gandrillon"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Bruno Cr\u00e9milleux", "label": "Bruno Cr\u00e9milleux", "shape": "dot", "size": 15, "title": "Bruno Cr\u00e9milleux"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Anes Bendimerad", "label": "Anes Bendimerad", "shape": "dot", "size": 15, "title": "Anes Bendimerad"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Anne Laurent", "label": "Anne Laurent", "shape": "dot", "size": 15, "title": "Anne Laurent"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Maguelonne Teisseire", "label": "Maguelonne Teisseire", "shape": "dot", "size": 15, "title": "Maguelonne Teisseire"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Adnene Belfodil", "label": "Adnene Belfodil", "shape": "dot", "size": 15, "title": "Adnene Belfodil"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Philippe Lamarre", "label": "Philippe Lamarre", "shape": "dot", "size": 15, "title": "Philippe Lamarre"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "J\u00e9r\u00e9my Besson", "label": "J\u00e9r\u00e9my Besson", "shape": "dot", "size": 15, "title": "J\u00e9r\u00e9my Besson"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Pierre Borgnat", "label": "Pierre Borgnat", "shape": "dot", "size": 15, "title": "Pierre Borgnat"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Eric Fleury", "label": "Eric Fleury", "shape": "dot", "size": 15, "title": "Eric Fleury"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Ronan Hamon", "label": "Ronan Hamon", "shape": "dot", "size": 15, "title": "Ronan Hamon"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Patrick Flandrin", "label": "Patrick Flandrin", "shape": "dot", "size": 15, "title": "Patrick Flandrin"}, {"color": "#4dff88", "font": {"color": "white"}, "id": "Pascal Poncelet", "label": "Pascal Poncelet", "shape": "dot", "size": 15, "title": "Pascal Poncelet"}]);
+                  edges = new vis.DataSet([{"from": "Mehdi Kaytoue", "title": "14 publications", "to": "Zainab Assaghir", "value": 14}, {"from": "Mehdi Kaytoue", "title": "112 publications", "to": "Mehdi Kaytoue", "value": 112}, {"from": "Mehdi Kaytoue", "title": "50 publications", "to": "Amedeo Napoli", "value": 50}, {"from": "Mehdi Kaytoue", "title": "13 publications", "to": "Youcef Remil", "value": 13}, {"from": "Mehdi Kaytoue", "title": "11 publications", "to": "Romain Mathonat", "value": 11}, {"from": "Mehdi Kaytoue", "title": "26 publications", "to": "Jean-Fran\u00e7ois Boulicaut", "value": 26}, {"from": "Mehdi Kaytoue", "title": "18 publications", "to": "Marc Plantevit", "value": 18}, {"from": "Mehdi Kaytoue", "title": "16 publications", "to": "C. Robardet", "value": 16}, {"from": "Mehdi Kaytoue", "title": "18 publications", "to": "Victor Codocedo", "value": 18}, {"from": "Mehdi Kaytoue", "title": "10 publications", "to": "Chedy Ra\u00efssi", "value": 10}, {"from": "Mehdi Kaytoue", "title": "12 publications", "to": "Guillaume Bosc", "value": 12}, {"from": "Zainab Assaghir", "title": "27 publications", "to": "Zainab Assaghir", "value": 27}, {"from": "Zainab Assaghir", "title": "15 publications", "to": "Amedeo Napoli", "value": 15}, {"from": "Amedeo Napoli", "title": "49 publications", "to": "Miguel Couceiro", "value": 49}, {"from": "Amedeo Napoli", "title": "520 publications", "to": "Amedeo Napoli", "value": 520}, {"from": "Amedeo Napoli", "title": "12 publications", "to": "Alexandre Bazin", "value": 12}, {"from": "Amedeo Napoli", "title": "15 publications", "to": "Pierre Monnin", "value": 15}, {"from": "Amedeo Napoli", "title": "27 publications", "to": "Adrien Coulet", "value": 27}, {"from": "Amedeo Napoli", "title": "14 publications", "to": "Fr\u00e9d\u00e9ric Pennerath", "value": 14}, {"from": "Amedeo Napoli", "title": "13 publications", "to": "B\u00e9atrice Fuchs", "value": 13}, {"from": "Amedeo Napoli", "title": "50 publications", "to": "Jean Lieber", "value": 50}, {"from": "Amedeo Napoli", "title": "13 publications", "to": "Alain Mille", "value": 13}, {"from": "Amedeo Napoli", "title": "40 publications", "to": "Marie-Dominique Devignes", "value": 40}, {"from": "Amedeo Napoli", "title": "12 publications", "to": "Amine Mohamed Rouane Hacene", "value": 12}, {"from": "Amedeo Napoli", "title": "16 publications", "to": "Marianne Huchard", "value": 16}, {"from": "Amedeo Napoli", "title": "23 publications", "to": "Petko Valtchev", "value": 23}, {"from": "Amedeo Napoli", "title": "19 publications", "to": "Tatiana Makhalova", "value": 19}, {"from": "Amedeo Napoli", "title": "39 publications", "to": "Sergei O. Kuznetsov", "value": 39}, {"from": "Amedeo Napoli", "title": "23 publications", "to": "Aleksey Buzmakov", "value": 23}, {"from": "Amedeo Napoli", "title": "24 publications", "to": "Chedy Ra\u00efssi", "value": 24}, {"from": "Amedeo Napoli", "title": "13 publications", "to": "J\u00e9r\u00f4me Euzenat", "value": 13}, {"from": "Amedeo Napoli", "title": "28 publications", "to": "Victor Codocedo", "value": 28}, {"from": "Amedeo Napoli", "title": "19 publications", "to": "Yannick Toussaint", "value": 19}, {"from": "Amedeo Napoli", "title": "27 publications", "to": "Florence Le Ber", "value": 27}, {"from": "Amedeo Napoli", "title": "16 publications", "to": "Nyoman Juniarta", "value": 16}, {"from": "Amedeo Napoli", "title": "10 publications", "to": "Justine Reynaud", "value": 10}, {"from": "Amedeo Napoli", "title": "10 publications", "to": "S\u00e9bastien Duplessis", "value": 10}, {"from": "Amedeo Napoli", "title": "37 publications", "to": "Malika Sma\u00efl-Tabbone", "value": 37}, {"from": "Amedeo Napoli", "title": "20 publications", "to": "Mehwish Alam", "value": 20}, {"from": "Amedeo Napoli", "title": "25 publications", "to": "Mathieu D\u2019aquin", "value": 25}, {"from": "Amedeo Napoli", "title": "22 publications", "to": "Nizar Messai", "value": 22}, {"from": "Amedeo Napoli", "title": "27 publications", "to": "Laszlo Szathmary", "value": 27}, {"from": "Amedeo Napoli", "title": "16 publications", "to": "Emmanuel Nauer", "value": 16}, {"from": "Amedeo Napoli", "title": "13 publications", "to": "Elias Egho", "value": 13}, {"from": "Amedeo Napoli", "title": "19 publications", "to": "Nicolas Jay", "value": 19}, {"from": "Amedeo Napoli", "title": "14 publications", "to": "Rim Al Hulou", "value": 14}, {"from": "Youcef Remil", "title": "15 publications", "to": "Youcef Remil", "value": 15}, {"from": "Romain Mathonat", "title": "15 publications", "to": "Romain Mathonat", "value": 15}, {"from": "Jean-Fran\u00e7ois Boulicaut", "title": "26 publications", "to": "Marc Plantevit", "value": 26}, {"from": "Jean-Fran\u00e7ois Boulicaut", "title": "170 publications", "to": "Jean-Fran\u00e7ois Boulicaut", "value": 170}, {"from": "Jean-Fran\u00e7ois Boulicaut", "title": "12 publications", "to": "Christophe Rigotti", "value": 12}, {"from": "Jean-Fran\u00e7ois Boulicaut", "title": "42 publications", "to": "C. Robardet", "value": 42}, {"from": "Jean-Fran\u00e7ois Boulicaut", "title": "16 publications", "to": "Nazha Selmaoui-Folcher", "value": 16}, {"from": "Jean-Fran\u00e7ois Boulicaut", "title": "17 publications", "to": "Olivier Gandrillon", "value": 17}, {"from": "Jean-Fran\u00e7ois Boulicaut", "title": "11 publications", "to": "Guillaume Bosc", "value": 11}, {"from": "Marc Plantevit", "title": "113 publications", "to": "Marc Plantevit", "value": 113}, {"from": "Marc Plantevit", "title": "46 publications", "to": "C. Robardet", "value": 46}, {"from": "Marc Plantevit", "title": "10 publications", "to": "Bruno Cr\u00e9milleux", "value": 10}, {"from": "Marc Plantevit", "title": "13 publications", "to": "Anes Bendimerad", "value": 13}, {"from": "Marc Plantevit", "title": "17 publications", "to": "Anne Laurent", "value": 17}, {"from": "Marc Plantevit", "title": "14 publications", "to": "Maguelonne Teisseire", "value": 14}, {"from": "Marc Plantevit", "title": "10 publications", "to": "Adnene Belfodil", "value": 10}, {"from": "Marc Plantevit", "title": "10 publications", "to": "Philippe Lamarre", "value": 10}, {"from": "C. Robardet", "title": "158 publications", "to": "C. Robardet", "value": 158}, {"from": "C. Robardet", "title": "10 publications", "to": "J\u00e9r\u00e9my Besson", "value": 10}, {"from": "C. Robardet", "title": "12 publications", "to": "Anes Bendimerad", "value": 12}, {"from": "C. Robardet", "title": "12 publications", "to": "Olivier Gandrillon", "value": 12}, {"from": "C. Robardet", "title": "22 publications", "to": "Pierre Borgnat", "value": 22}, {"from": "C. Robardet", "title": "11 publications", "to": "Eric Fleury", "value": 11}, {"from": "C. Robardet", "title": "11 publications", "to": "Ronan Hamon", "value": 11}, {"from": "C. Robardet", "title": "16 publications", "to": "Patrick Flandrin", "value": 16}, {"from": "Victor Codocedo", "title": "38 publications", "to": "Victor Codocedo", "value": 38}, {"from": "Chedy Ra\u00efssi", "title": "71 publications", "to": "Chedy Ra\u00efssi", "value": 71}, {"from": "Chedy Ra\u00efssi", "title": "14 publications", "to": "Pascal Poncelet", "value": 14}, {"from": "Chedy Ra\u00efssi", "title": "13 publications", "to": "Elias Egho", "value": 13}, {"from": "Chedy Ra\u00efssi", "title": "15 publications", "to": "Nicolas Jay", "value": 15}, {"from": "Guillaume Bosc", "title": "12 publications", "to": "Guillaume Bosc", "value": 12}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "forceAtlas2Based": {
+            "avoidOverlap": 0,
+            "centralGravity": 0.01,
+            "damping": 0.4,
+            "gravitationalConstant": -50,
+            "springConstant": 0.08,
+            "springLength": 100
+        },
+        "solver": "forceAtlas2Based",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
