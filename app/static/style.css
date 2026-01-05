@@ -17,7 +17,7 @@ body {
     color: var(--text);
 }
 
-/* Header */
+
 
 header {
     padding: 40px;
@@ -34,18 +34,18 @@ header p {
     margin-top: 10px;
 }
 
-/* SECTION PRINCIPALE */
+
 
 .film-list {
     display: grid;
-    grid-template-columns: 1fr;   /* 🔥 UNE COLONNE */
+    grid-template-columns: 1fr;   
     gap: 30px;
     padding: 40px;
     max-width: 900px;
     margin: auto;
 }
 
-/* CARTE FILM */
+
 
 .film-card {
     background: linear-gradient(145deg, #1f2347, #16193a);
@@ -78,7 +78,7 @@ header p {
     font-size: 0.95rem;
 }
 
-/* COEURS */
+
 
 .hearts {
     margin-top: 15px;
@@ -94,7 +94,7 @@ header p {
     color: var(--accent);
 }
 
-/* ACTIONS */
+
 
 .actions {
     text-align: center;
