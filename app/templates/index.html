@@ -2,18 +2,42 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <title>Navig-Ciné</title>
+    <title>FilmFinderz</title>
+    <link rel="stylesheet" href="static/style.css">
 </head>
 <body>
-    <h1>Navig-Ciné 🎬</h1>
 
-    <p>Exploration des films via DBpedia</p>
+<header>
+    <h1>🎬 FilmFinderz</h1>
+    <p>Découvrez et notez des films pour obtenir des recommandations intelligentes</p>
+</header>
 
-    <ul>
-        <li>Titre</li>
-        <li>Réalisateur</li>
-        <li>Acteurs</li>
-        <li>Année</li>
-    </ul>
+<section class="film-list">
+
+    <div class="film-card" data-film="Inception">
+        <img src="https://picsum.photos/800/400?random=1">
+        <div class="film-content">
+            <h3>Inception</h3>
+            <p>Un thriller de science-fiction explorant les rêves et la manipulation de l’esprit.</p>
+            <div class="hearts"></div>
+        </div>
+    </div>
+
+    <div class="film-card" data-film="Amelie">
+        <img src="https://picsum.photos/800/400?random=2">
+        <div class="film-content">
+            <h3>Le Fabuleux Destin d’Amélie Poulain</h3>
+            <p>Une comédie romantique poétique au cœur de Paris.</p>
+            <div class="hearts"></div>
+        </div>
+    </div>
+
+</section>
+
+<div class="actions">
+    <button onclick="sendRatings()">Obtenir mes recommandations</button>
+</div>
+
+<script src="/static/script.js"></script>
 </body>
 </html>
