@@ -6,7 +6,14 @@ async function executeSparql() {
     
     // Exemple de requête : Récupérer 5 films sur DBpedia
     const sparqlQuery = `
-        CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o} LIMIT 10
+        PREFIX dbo: <http://dbpedia.org/ontology/>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT ?film ?description
+        WHERE {
+        ?film rdf:type dbo:Film ;
+            dbo:description ?description .
+        }
+        LIMIT 5
     `;
 
     // Encodage de la requête pour l'URL
