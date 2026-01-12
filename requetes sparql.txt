@@ -164,3 +164,36 @@ WHERE {
 }
 GROUP BY ?film ?directorScore
 ORDER BY DESC(?totalScore)
+
+*********************finale
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+
+SELECT ?film ?director 
+    (GROUP_CONCAT(DISTINCT ?genre; separator=", ") AS ?genres) 
+    (GROUP_CONCAT(DISTINCT ?actor; separator=", ") AS ?actors)
+    (?scoreDir + ?scoreActor + ?scoreGenre AS ?totalScore)
+WHERE {
+  # 1. Sélectionner les films qui matchent au moins UN critère (Performance)
+  {
+    { ?film dbo:director dbr:Blair_Treu . }
+    UNION
+    { ?film dbo:starring dbr:Bailee_Madison . }
+    UNION
+    { ?film dbo:genre dbr:Fantasy_comedy . }
+  }
+
+  # 2. Récupérer les informations pour l'affichage (GROUP_CONCAT)
+  OPTIONAL { ?film dbo:director ?director . }
+  OPTIONAL { ?film dbo:starring ?actor . }
+  OPTIONAL { ?film dbo:genre ?genre . }
+
+  # 3. Calculer les points de score individuellement
+  BIND(IF(EXISTS { ?film dbo:director dbr:Blair_Treu }, 1, 0) AS ?scoreDir)
+  BIND(IF(EXISTS { ?film dbo:starring dbr:Bailee_Madison }, 1, 0) AS ?scoreActor)
+  BIND(IF(EXISTS { ?film dbo:genre dbr:Fantasy_comedy }, 1, 0) AS ?scoreGenre)
+}
+GROUP BY ?film ?director ?scoreDir ?scoreActor ?scoreGenre
+ORDER BY DESC(?totalScore)
+LIMIT 100
