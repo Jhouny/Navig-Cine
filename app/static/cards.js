@@ -16,24 +16,10 @@ const filmsByCategory = {
 // const filmsByCategoryGraphDB = fetchFilmsByGenre();
 
 function initializeFilmCards() {
+    console.log("film cards:", document.querySelectorAll(".film-card").length);
+
     document.querySelectorAll(".film-card").forEach(card => {
         const film = card.dataset.film;
-        const container = card.querySelector(".hearts");
-        ratings[film] = 0;
-
-        // Ajouter les cœurs
-        for (let i = 1; i <= 5; i++) {
-            const heart = document.createElement("span");
-            heart.innerHTML = "♥";
-            heart.classList.add("heart");
-
-            heart.addEventListener("click", () => {
-                ratings[film] = i;
-                updateHearts(container, i);
-            });
-
-            container.appendChild(heart);
-        }
 
         // Ajouter le bouton reload
         const reloadBtn = document.createElement('button');
@@ -42,33 +28,79 @@ function initializeFilmCards() {
         reloadBtn.style.position = "absolute";
         reloadBtn.style.top = "10px";
         reloadBtn.style.right = "10px";
+        reloadBtn.style.zIndex = "10";
 
         reloadBtn.addEventListener('click', () => {
             const category = card.dataset.category;
-            const newFilm = getRandomFilm(category);
+            const newFilm = getRandomFilm(category, card);
             if (newFilm) {
                 card.querySelector('h3').textContent = newFilm;
             }
         });
-
         card.style.position = "relative";
         card.appendChild(reloadBtn);
+
+        // Ajouter des listeners aux boutons d'action
+        const actionButtons = card.querySelectorAll(".btn");
+
+        actionButtons.forEach(btn => {
+            btn.addEventListener("click", () => {
+
+                // Si déjà actif → toggle off
+                if (btn.classList.contains("active")) {
+                    btn.classList.remove("active");
+                    return;
+                }
+
+                // Désactiver les autres boutons de la même carte
+                actionButtons.forEach(b => b.classList.remove("active"));
+
+                // Activer celui-ci
+                btn.classList.add("active");
+            });
+        });
+
     });
 }
+initializeFilmCards();
 
-function updateHearts(container, count) {
-    [...container.children].forEach((heart, index) => {
-        heart.classList.toggle("filled", index < count);
-    });
-}
-
-function getRandomFilm(category) {
+function getRandomFilm(category, card) {
     const list = filmsByCategory[category] || [];
     if (list.length === 0) return null;
     const randomIndex = Math.floor(Math.random() * list.length);
+    const img = card.querySelector(".poster");
+    img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
     return list[randomIndex];
 }
 
-function getRatings() {
-    return ratings;
+function checkMarked() {
+    const cards = document.querySelectorAll(".film-card");
+    let allValid = true;
+
+    cards.forEach(card => {
+        const activeBtn = card.querySelector(".btn.active");
+        if (!activeBtn) {
+            allValid = false;
+            card.style.outline = "2px solid #e04f5f";
+        } else {
+            card.style.outline = "none";
+        }
+    });
+
+    return allValid;
+}
+
+function getRecommendations() {
+    const ok = checkMarked();
+
+    if (!ok) {
+        alert("Merci de noter tous les films avant d’obtenir des recommandations.");
+        return;
+    }
+
+    console.log("Toutes les cartes sont notées. Recommandations à venir.");
+}
+
+function sendRatings() {
+    getRecommendations();
 }
