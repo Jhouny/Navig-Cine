@@ -6,18 +6,14 @@ async function executeSparql() {
     
     // Exemple de requête : Récupérer 5 films sur DBpedia
     const sparqlQuery = `
-        PREFIX dbo: <http://dbpedia.org/ontology/>
-        SELECT ?label WHERE {
-          ?movie a dbo:Film .
-          ?movie rdfs:label ?label .
-          FILTER (lang(?label) = 'fr')
-        } LIMIT 5
+        CONSTRUCT {?s ?p ?o} WHERE {?s ?p ?o} LIMIT 10
     `;
 
     // Encodage de la requête pour l'URL
     const url = `${endpoint}?query=${encodeURIComponent(sparqlQuery)}`;
 
     try {
+        console.log("Envoi de la requête SPARQL...");
         const response = await fetch(url);
         if (!response.ok) throw new Error('Erreur réseau');
         
@@ -29,11 +25,9 @@ async function executeSparql() {
             console.log(binding.label.value);
         });
     } catch (error) {
-        console.error("Erreur lors de la requête :", error);
+        console.error("Erreur lors de la requête SPARQL :", error);
     }
 }
-
-executeSparql();
 
 async function fetchGenresFromSPARQL() {
     const sparqlQuery = `

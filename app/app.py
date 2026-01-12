@@ -1,19 +1,11 @@
 from flask import Flask, render_template, request, jsonify
-from SPARQLWrapper import SPARQLWrapper, JSON
+from SPARQLWrapper import SPARQLWrapper, JSON, RDFXML, GET
 
 app = Flask(__name__)
 
 @app.route("/")
 def home():
     return render_template("index.html")
-
-if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=10000,
-        debug=True
-    )
-    print("Server is running on http://localhost:5000")
 
 @app.route('/sparql', methods=['GET'])
 def query_sparql():
@@ -24,12 +16,22 @@ def query_sparql():
     if not query:
         return jsonify({"error": "No query provided"}), 400
 
-    sparql = SPARQLWrapper("http://10.56.62.206:7200")
+    sparql = SPARQLWrapper("http://10.56.62.206:7200/repositories/Gdb-Navig-Cine")
+    sparql.setMethod(GET)
     sparql.setQuery(query)
-    sparql.setReturnFormat(JSON)
+    sparql.setReturnFormat(RDFXML)
 
     try:
-        results = sparql.query().convert()
+        results = sparql.query()
+        print("results:", results)
         return jsonify(results)
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+    
+if __name__ == "__main__":
+    app.run(
+        host="0.0.0.0",
+        port=10000,
+        debug=True
+    )
+    print("Server is running on http://localhost:10000")
