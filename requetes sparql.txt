@@ -1,0 +1,166 @@
+﻿Profil 
+{ 
+Films = []
+Genre = [Drama : 3, Fantaisie : 2] (trié décroissant)
+Réalisateurs = [Spielberg : 3]
+Acteurs = []
+}
+
+
+*********************par titre*********************************
+SELECT DISTINCT ?film
+    WHERE {{
+?film a schema:Movie; 
+rdfs:label ?title.
+FILTER(
+LCASE(STR(?title)) = "interstellar"
+)
+}}
+
+
+*******************par directeur***********************************
+SELECT DISTINCT ?film
+    WHERE {{
+?film a schema:Movie;
+dbo:director ?director.
+?director rdfs:label ?director_label.
+
+
+FILTER(
+LCASE(STR(?director_label)) = "christopher nolan"
+)
+}}
+
+
+*******************par 1 acteur***********************************
+SELECT DISTINCT ?film
+    WHERE {{
+?film a schema:Movie;
+dbo:starring ?actor.
+?actor rdfs:label ?actor_label.
+
+
+FILTER(
+LCASE(STR(?actor_label)) = "anne hathaway"
+)
+}}
+
+
+*******************par 1 genre***********************************
+SELECT DISTINCT ?film
+    WHERE {{
+?film a schema:Movie;
+dct:subject ?subject.
+?subject rdfs:label ?subject_label.
+
+
+FILTER(
+regex(?subject_label, ".*science fiction.*")
+)
+}}
+
+
+****************par plusieurs acteurs********************************
+SELECT ?film (COUNT(?actor) AS ?nbActors) WHERE {
+  ?film a schema:Movie ; dbo:starring ?actor .
+  ?actor rdfs:label ?name .
+  VALUES ?name { "Anne Hathaway"@en "Tom Cruise"@en "Meryl Streep"@en }
+}
+GROUP BY ?film
+ORDER BY DESC (?nbActors )
+
+
+****************par plusieurs criteres********************************
+
+
+PREFIX dbo:  <http://dbpedia.org/ontology/>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+
+SELECT
+  ?film
+  ?directorScore
+  (COUNT(DISTINCT ?actor ) AS ?actorScore)
+  ( ?directorScore + COUNT(DISTINCT ?actor  ) AS ?totalScore )
+WHERE {
+  ?film a dbo:Film ;
+        dbo:director ?director .
+
+
+  # Score réalisateur
+  ?director rdfs:label ?directorLabel .
+  BIND(
+    IF(LCASE(STR(?directorLabel)) = "david frankel", 1, 0)
+    AS ?directorScore
+  )
+
+
+  # Filtrage des acteurs
+OPTIONAL{
+?film dbo:starring ?actor.
+  ?actor rdfs:label ?actorLabel .
+ VALUES ?actorLabel {
+    "Anne Hathaway"@en
+    "Tom Cruise"@en
+    "Meryl Streep"@en
+  }
+}
+
+
+}
+GROUP BY ?film ?directorScore
+ORDER BY DESC(?totalScore)
+
+
+“ —------------marche pas
+ # Score réalisateur
+  ?director rdfs:label ?directorLabel .
+  BIND(
+    (IF(LCASE(STR(?directorLabel)) = "david frankel", 1, 0) +
+     IF(LCASE(STR(?directorLabel)) = "james cameron", 1, 0)) AS ?directorScore
+  )
+
+
+  # Score acteurs (OPTIONAL pour inclure films sans acteurs ciblés)
+  OPTIONAL {
+    ?film dbo:starring ?actor .
+    ?actor rdfs:label ?actorLabel .
+    BIND(
+      (IF(LCASE(STR(?actorLabel)) = "anne hathaway", 1, 0) +
+       IF(LCASE(STR(?actorLabel)) = "tom cruise", 1, 0) +
+       IF(LCASE(STR(?actorLabel)) = "meryl streep", 1, 0)) AS ?actorPoint
+    )
+  }
+}
+GROUP BY ?film ?directorScore
+ORDER BY DESC(?totalScore)
+
+
+—----------------------------avec GraphDB (à perfectionner)
+PREFIX dbo: <http://dbpedia.org/ontology/>
+PREFIX dbr: <http://dbpedia.org/resource/>
+
+
+SELECT 
+  ?film 
+  ?directorScore 
+  ?actorScore
+  (?directorScore + ?actorScore AS ?totalScore)
+WHERE {
+  # Structure de base : le film et son réalisateur
+  ?film dbo:director ?director .
+  
+  # Calcul du score réalisateur via URI
+  # On vérifie si l'URI du réalisateur correspond à celle de David Frankel
+  BIND(IF(?director = dbr:David_Frankel, 1, 0) AS ?directorScore)
+
+
+  # Recherche des acteurs (Optionnel pour ne pas exclure les films sans les acteurs cibles)
+  OPTIONAL {
+    ?film dbo:starring ?actor .
+    # On filtre les acteurs via une liste d'URIs
+    FILTER (?actor IN (dbr:Anne_Hathaway, dbr:Tom_Cruise, dbr:Meryl_Streep))
+  }
+}
+GROUP BY ?film ?directorScore
+ORDER BY DESC(?totalScore)
