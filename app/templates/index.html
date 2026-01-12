@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>FilmFinderz</title>
+    <link rel="stylesheet" href="static/style.css">
+    <script type="text/javascript" src="static/recommandations.js"></script>
+    <script type="text/javascript" src="static/sparql.js"></script>
+</head>
+<body>
+
+<header>
+    <h1>🎬 FilmFinderz</h1>
+    <p>Découvrez et notez des films pour obtenir des recommandations intelligentes</p>
+</header>
+
+<section class="film-list">
+    <section class="film-row">
+
+        <div class="film-card" data-film="Inception" data-category="science-fiction">
+            <img class="poster" src="https://picsum.photos/800/400?random=2">
+            <div class="film-info">
+                <h3>Inception</h3>
+                <p>Un thriller de science-fiction explorant les rêves et la manipulation de l’esprit.</p>
+
+                <div class="actions">
+                    <button class="btn like">👍 Like</button>
+                    <button class="btn dislike">👎 Dislike</button>
+                    <button class="btn skip">⏭ Didn’t watch</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="film-card" data-film="Interstellar" data-category="science-fiction">
+            <img class="poster" src="https://picsum.photos/800/400?random=1">
+            <div class="film-info">
+                <h3>Interstellar</h3>
+                <p>Une exploration spatiale et émotionnelle au-delà du temps.</p>
+
+                <div class="actions">
+                    <button class="btn like">👍 Like</button>
+                    <button class="btn dislike">👎 Dislike</button>
+                    <button class="btn skip">⏭ Didn’t watch</button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <section class="film-row">
+
+        <div class="film-card" data-film="Inception" data-category="science-fiction">
+            <img class="poster" src="https://picsum.photos/800/400?random=2">
+            <div class="film-info">
+                <h3>Inception</h3>
+                <p>Un thriller de science-fiction explorant les rêves et la manipulation de l’esprit.</p>
+
+                <div class="actions">
+                    <button class="btn like">👍 Like</button>
+                    <button class="btn dislike">👎 Dislike</button>
+                    <button class="btn skip">⏭ Didn’t watch</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="film-card" data-film="Interstellar" data-category="science-fiction">
+            <img class="poster" src="https://picsum.photos/800/400?random=1">
+            <div class="film-info">
+                <h3>Interstellar</h3>
+                <p>Une exploration spatiale et émotionnelle au-delà du temps.</p>
+
+                <div class="actions">
+                    <button class="btn like">👍 Like</button>
+                    <button class="btn dislike">👎 Dislike</button>
+                    <button class="btn skip">⏭ Didn’t watch</button>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+    <div class="baseboard">
+        <button class="btn sendRatings" onclick="sendRatings()">Obtenir mes recommandations</button>
+    </div>
+
+
+</section>
+
+
+<script type="text/javascript" src="static/cards.js" defer></script>
+<script type="text/javascript" src="static/main.js" defer></script>
+
+</body>
+
+</html>
