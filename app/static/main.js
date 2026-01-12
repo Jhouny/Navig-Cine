@@ -7,7 +7,7 @@ async function init() {
 
     // Test de la connexion au serveur SPARQL
     try {
-        const test = await executeSparql();
+        const test = await fetchFilmsAndGenre();
         console.log("Connexion SPARQL réussie. Genres récupérés:", test);
     } catch (error) {
         console.error("Erreur de connexion au serveur SPARQL:", error);

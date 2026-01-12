@@ -71,14 +71,14 @@ async function fetchGenresFromSPARQL() {
     }
 }
 
-async function fetchFilmsByGenre(genre) {
+async function fetchFilmsAndGenre() {
     const sparqlQuery = `
-        PREFIX movie: <http://example.org/movie#>
-        
-        SELECT ?film ?title
+        PREFIX dbo: <http://dbpedia.org/ontology/>
+        PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+        SELECT ?film ?genre
         WHERE {
-            ?film movie:hasGenre "${genre}" ;
-                  movie:title ?title .
+            ?film rdf:type dbo:Film ;
+            dbo:genre ?genre .
         }
     `;
 
