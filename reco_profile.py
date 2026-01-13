@@ -59,5 +59,6 @@ def get_reco(profil):
     return pd.DataFrame(data)
 
 # Lancement de la requête
-df_music = query_dbpedia("Interstellar")
+profil = {'Films' : {},'Genre' : {'Drama' : 3, 'Fantaisie' : 2}, 'Réalisateurs' : {'Spielberg' : 3},'Acteurs' : {}}
+df_music = query_dbpedia(profil)
 df_music.head()
