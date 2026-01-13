@@ -197,3 +197,27 @@ WHERE {
 GROUP BY ?film ?director ?scoreDir ?scoreActor ?scoreGenre
 ORDER BY DESC(?totalScore)
 LIMIT 100
+
+-----------------------simplifiee (algo sera en python)
+SELECT ?film 
+    (GROUP_CONCAT(DISTINCT ?director; separator=", ") AS ?directors) 
+    (GROUP_CONCAT(DISTINCT ?genre; separator=", ") AS ?genres) 
+    (GROUP_CONCAT(DISTINCT ?actor; separator=", ") AS ?actors)
+WHERE 
+{
+  
+    { 
+      ?film dbo:director ?director .
+      FILTER(?director IN(dbr:David_Frankel, dbr:James_Cameron)) 
+    }
+    UNION
+    { 
+      ?film dbo:starring ?actor.
+      FILTER(?actor IN (dbr:Anne_Hathaway, dbr:Tom_Cruise, dbr:Meryl_Streep)) 
+    }
+    UNION
+    { ?film dbo:genre ?genre.
+      FILTER ( ?genre IN ( dbr:Fantasy_comedy ))
+    }
+}
+GROUP BY ?film
