@@ -49,7 +49,7 @@ def get_reco(profil):
 
         #todo : calculer score
         
-        data.append({
+        data.append({#possibilité de faire une prior queue ? 
             "Film": result.get("film", {}).get("value", "N/A"),
             "Realisateurs" : liste_de_reals,#gerer liste
             "Acteurs": liste_dacteurs,#gerer liste
