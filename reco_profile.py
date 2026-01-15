@@ -87,7 +87,7 @@ def get_reco(profil, query ="default", test=False):
             "Genres": liste_de_genres,
             "Score": score
         })
-    return pd.DataFrame(data)
+    return pd.DataFrame(data).sort_values("Score", ascending=False)
 
 # Lancement de la requête
 profil = {'Films' : {},'genres' : {'dbr:Fantasy_comedy':10}, 'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4}}
