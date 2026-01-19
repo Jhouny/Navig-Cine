@@ -76,10 +76,14 @@ async function fetchFilmsAndGenre() {
     const sparqlQuery = `
         PREFIX dbo: <http://dbpedia.org/ontology/>
         PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-        SELECT ?film ?genre
+        SELECT ?film ?genre ?description ?starring ?director ?image
         WHERE {
-            ?film rdf:type dbo:Film ;
-            dbo:genre ?genre .
+            ?film rdf:type dbo:Film .
+    		?film dbo:genre ?genre.
+    		OPTIONAL {?film dbo:description ?description .}
+    		OPTIONAL {?film dbo:starring ?starring .}
+    		OPTIONAL {?film dbo:director ?director .}
+            OPTIONAL {?film dbo:image ?director .}
         }
     `;
 

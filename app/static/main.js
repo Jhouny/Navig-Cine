@@ -5,25 +5,16 @@
 async function init() {
     console.log("Initialisation de l'application...");
 
-    profil = {
-    'Films' : {},
-    'genres' : {'dbr:Fantasy_comedy':10},
-    'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},
-    'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4}
-    };
-
-    getRecommendations(profil);
-
     // Initialiser les cartes de films
-    initializeFilmCards();
+    createFilmCards();
 
     // Charger les genres depuis SPARQL
-    const genres = await fetchGenresFromSPARQL();
-    genres.forEach(result => {
-        const genre = result.genre.value;
-        const count = result.count.value;
-        console.log(`Genre: ${genre}, Films: ${count}`);
-    });
+
+    // genres.forEach(result => {
+    //     const genre = result.genre.value;
+    //     const count = result.count.value;
+    //     console.log(`Genre: ${genre}, Films: ${count}`);
+    // });
 
     // Configurer le bouton de soumission
     const submitBtn = document.getElementById('submit-ratings');

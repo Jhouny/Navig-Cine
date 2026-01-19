@@ -5,8 +5,9 @@ const filmsByCategory = {
     "romance": ["Amélie", "Titanic", "La La Land", "Pride & Prejudice", "Her"],
     "action": ["Mad Max", "John Wick", "Die Hard", "Gladiator", "The Dark Knight"],
     "comedy": ["Superbad", "The Hangover", "Monty Python", "Step Brothers", "Bridesmaids"],
-    "horror": ["Get Out", "It", "The Shining", "A Quiet Place", "Hereditary"]
-};
+    "horror": ["Get Out", "It", "The Shining", "A Quiet Place", "Hereditary"],
+    "drama": ["The Godfather", "Forrest Gump", "Schindler's List", "Fight Club", "The Shawshank Redemption"]
+};  
 
 // Add hearts and reload button with their event listeners
 document.querySelectorAll(".film-card").forEach(card => {
