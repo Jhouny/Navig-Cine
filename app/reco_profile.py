@@ -76,10 +76,7 @@ def get_reco(profil, query ="default", test=False):
 
         for real in liste_de_reals:
             real = real.replace("http://dbpedia.org/resource/", "dbr:" )
-            print(real)
-            print(f" in {profil.get('realisateurs').keys()} ?")
             if(real in profil.get("realisateurs").keys()):
-                print ("yesss !")
                 score += profil.get("realisateurs").get(real)
 
         for genre in liste_de_genres:
