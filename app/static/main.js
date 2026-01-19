@@ -5,6 +5,15 @@
 async function init() {
     console.log("Initialisation de l'application...");
 
+    profil = {
+    'Films' : {},
+    'genres' : {'dbr:Fantasy_comedy':10},
+    'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},
+    'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4}
+    };
+
+    getRecommendations(profil);
+
     // Initialiser les cartes de films
     initializeFilmCards();
 

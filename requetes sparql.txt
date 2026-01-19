@@ -1,10 +1,11 @@
-﻿Profil 
-{ 
-Films = []
-Genre = [Drama : 3, Fantaisie : 2] (trié décroissant)
-Réalisateurs = [Spielberg : 3]
-Acteurs = []
-}
+﻿
+
+profil = {
+'Films' : {},
+'genres' : {'dbr:Fantasy_comedy':10},
+ 'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},
+ 'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4}
+ }
 
 
 *********************par titre*********************************
