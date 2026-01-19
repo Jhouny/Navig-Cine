@@ -20,13 +20,12 @@ async function createFilmCards() {
     filmsByCategory = dicos["genres"];
     filmsInfos = dicos["films"];
 
-    console.log(filmsByCategory);
-    console.log(filmsInfos);
+    console.log("Categories and its films:",filmsByCategory);
+    console.log("Films and its infos:",filmsInfos);
 
     const filmList = document.querySelector(".film-list");
     filmList.innerHTML = "";
     
-    // Choisir 5 catégories aléatoires
     const categories = Object.keys(filmsByCategory)
         .sort(() => Math.random() - 0.5)
         .slice(0, 5);
@@ -43,7 +42,7 @@ async function createFilmCards() {
             }; 
             films.push(film);
         }
-        
+
         //if(notAvailabe) continue;
 
         // Créer la section pour chacune des catégories
