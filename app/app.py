@@ -38,7 +38,7 @@ def query_sparql():
         results = sparql.query().convert()
         convertedResults = convertSPARQLOutputToDico(results)
         topN = 5
-        results_limited = keepTopNResults(convertedResults["results"]["bindings"]["genres"], topN)
+        results_limited = keepTopNResults(convertedResults, topN)
 
         return jsonify(results_limited), 200
     except Exception as e:

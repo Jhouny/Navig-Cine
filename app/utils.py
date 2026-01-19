@@ -37,9 +37,8 @@ def convertSPARQLOutputToDico(results):
 def keepTopNResults(results, N):
 
     # Garder uniquement les 5 genres avec les plus de films
-    sorted_genres = sorted(results["results"]["bindings"].items(), key=lambda item: len(item[1]), reverse=True)
+    sorted_genres = sorted(results["results"]["bindings"]["genres"].items(), key=lambda item: len(item[1]), reverse=True)
     topN_genres = dict(sorted_genres[:N])
-    results["results"]["bindings"] = topN_genres
+    results["results"]["bindings"]["genres"] = topN_genres
 
     return results
-
