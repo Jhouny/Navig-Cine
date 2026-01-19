@@ -238,7 +238,6 @@ function sendRatings() {
         userProfil.Films[film] = score;
 
         const meta = filmsInfos[film];
-        const genres = filmsByCategory;
         if (!meta) return;
 
         Object.entries(filmsByCategory).forEach(([genre, films]) => {
@@ -247,15 +246,16 @@ function sendRatings() {
             }
         });
 
-        // --- Réalisateurs ---
-        meta.realisateurs?.forEach(r => {
-            userProfil.realisateurs[r] = (userProfil.realisateurs[r] || 0) + score;
+        normalizeToArray(meta.director).forEach(director => {
+            userProfil.realisateurs[director] =
+                (userProfil.realisateurs[director] || 0) + score;
+        });
+        
+        normalizeToArray(meta.starring).forEach(actor => {
+            userProfil.acteurs[actor] =
+                (userProfil.acteurs[actor] || 0) + score;
         });
 
-        // --- Acteurs ---
-        meta.acteurs?.forEach(a => {
-            userProfil.acteurs[a] = (userProfil.acteurs[a] || 0) + score;
-        });
     });
 
     const uid = Math.random().toString(16).slice(2);
@@ -267,3 +267,14 @@ function sendRatings() {
     window.location.href = `/recommendations?uid=` + encodeURIComponent(uid);
 }
 
+function isValidValue(v) {
+    return v && v !== "N/A";
+}
+
+function normalizeToArray(value) {
+    if (!isValidValue(value)) return [];
+    if (Array.isArray(value)) {
+        return value.filter(v => isValidValue(v));
+    }
+    return [value];
+}

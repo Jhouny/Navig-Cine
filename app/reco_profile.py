@@ -63,7 +63,7 @@ def get_reco(profil, query ="default", test=False):
         """
     
     if (not test) :
-        sparql = SPARQLWrapper("http://10.56.62.206:7200/repositories/Gdb-Navig-Cine")
+        sparql = SPARQLWrapper("http://127.0.0.1:7201/repositories/Gdb-Navig-Cine")
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
@@ -148,5 +148,5 @@ profil = {
                  'dbr:Jessica_Tuck' : 2}
         }
 requete_naturelle = "les films réalisés par Blair Treu"
-df_reco = get_reco_par_requete_naturelle(profil, requete_naturelle)
+df_reco = get_reco(profil)
 print(df_reco)
