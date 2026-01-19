@@ -46,12 +46,6 @@ function initializeFilmCards() {
         actionButtons.forEach(btn => {
             btn.addEventListener("click", () => {
 
-                // Si déjà actif → toggle off
-                if (btn.classList.contains("active")) {
-                    btn.classList.remove("active");
-                    return;
-                }
-
                 // Désactiver les autres boutons de la même carte
                 actionButtons.forEach(b => b.classList.remove("active"));
 

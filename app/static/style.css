@@ -92,13 +92,14 @@ header h1 {
     transition: all 0.2s ease;
 }
 
-.btn.active {
+.btn:active {
     background: linear-gradient(135deg, rgba(224,79,95,0.25), rgba(224,79,95,0.15));
     border-color: var(--accent);
     color: var(--accent-soft);
 }
 
-.btn:hover {
+.btn.active {
+    background: linear-gradient(135deg, rgba(224,79,95,0.35), rgba(224,79,95,0.2));
     border-color: var(--accent);
     color: var(--accent-soft);
 }
