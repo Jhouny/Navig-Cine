@@ -1,5 +1,33 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 import heapq
+from openai import OpenAI
+
+def requete_sparql(requete_naturelle):
+        
+    # Initialize the client
+    client = OpenAI(
+        base_url="https://ollama-ui.pagoda.liris.cnrs.fr/api",  
+        api_key="sk-35729c1f15074008972ee602959d9f7b",         #   (go to profile - bottom left, account)
+    )
+
+    # Call the 70B model
+    response = client.chat.completions.create(
+        model="llama3:70b",
+        messages=[
+            {"role": "system", "content": "Tu es un traducteur de requêtes plein texte vers SPARQL. \
+             Tu utilises un graphe qui contient uniquement ?film dbo:director ?director, ?film dbo:starring ?actor, ?film dbo:genre ?genre et ?film dbo:description ?description. Tu connais des éléments de modèle suivant : <http://dbpedia.org/resource/Comedy>. La requete doit repourner : ?film l'url du film, ?directors la liste des uri des realisateurs séparés par une virgule et un espace, ?genres la liste des uri des genres séparés par une virgule et un espace et ?actors liste des uri des acteurs séparés par une virgule et un espace. Tu ne dois répondre qu'en SPARQL, aucun texte, aucune explication en sus."},
+            {"role": "user", "content": requete_naturelle}
+        ],
+        temperature=0.7
+    )
+
+    requete_sparql = response.choices[0].message.content
+    return requete_sparql
+
+def get_reco_par_requete_naturelle(profil, requete_naturelle):
+    ma_requete_sparql = requete_sparql(requete_naturelle)
+    reco = get_reco(profil, query =ma_requete_sparql)
+    return reco
 
 def get_reco(profil, query ="default", test=False):
 
@@ -102,6 +130,17 @@ def get_reco(profil, query ="default", test=False):
     return res
 
 # Lancement de la requête
-profil = {'Films' : {},'genres' : {'dbr:Fantasy_comedy':10}, 'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4, 'dbr:Jessica_Tuck' : 2}}
-df_reco = get_reco(profil)
+profil = {
+    'Films' : {},
+    'genres' : {'dbr:Science_fiction':10}, 
+    'realisateurs' : {'dbr:David_Frankel' : 2, 
+                      'dbr:James_Cameron' : 1, 
+                      'dbr:Christopher_Nolan' : 11},
+    'acteurs' : {'dbr:Anne_Hathaway':1, 
+                 'dbr:Tom_Cruise':1, 
+                 'dbr:Meryl_Streep':4, 
+                 'dbr:Jessica_Tuck' : 2}
+        }
+requete_naturelle = "les films réalisés par Blair Treu"
+df_reco = get_reco_par_requete_naturelle(profil, requete_naturelle)
 print(df_reco)
