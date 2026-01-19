@@ -71,21 +71,27 @@ def get_reco(profil, query ="default", test=False):
         results = {
                     "results": {
                         "bindings": [
-                        {"film":{"value":"dbr:Film_1"},
-                        "directors":{"value":"dbr:David_Frankel"},
-                        "actors":{"value":"dbr:Anne_Hathaway"},
-                        "genres":{"value":"dbr:Fantasy_comedy"}},
-                        {"film":{"value":"dbr:Film_2"},
-                        "directors":{"value":"dbr:James_Cameron"},
-                        "actors":{"value":"dbr:Tom_Cruise, dbr:Anne_Hathaway, dbr:Leonardo_Di_Caprio"},
-                        "genres":{}},
-                        {"film":{"value":"dbr:Film_3"},
-                        "directors":{"value":"dbr:David_Frankel"},
-                        "actors":{"value":"dbr:Meryl_Streep"},
-                        "genres":{"value":"dbr:OtherGenre"}}
+                            {
+                                "film":{"value":"dbr:Film_1"},
+                                "directors":{"value":"dbr:David_Frankel"},
+                                "actors":{"value":"dbr:Anne_Hathaway"},
+                                "genres":{"value":"dbr:Fantasy_comedy"}
+                            },
+                            {
+                                "film":{"value":"dbr:Film_2"},
+                                "directors":{"value":"dbr:James_Cameron"},
+                                "actors":{"value":"dbr:Tom_Cruise, dbr:Anne_Hathaway, dbr:Leonardo_Di_Caprio"},
+                                "genres":{}
+                            },
+                            {
+                                "film":{"value":"dbr:Film_3"},
+                                "directors":{"value":"dbr:David_Frankel"},
+                                "actors":{"value":"dbr:Meryl_Streep"},
+                                "genres":{"value":"dbr:OtherGenre"}
+                            }
                         ]
                     }
-                    }
+                }
     
     # Requête et transformation du résultats en pandas dataframe
     data_priorQ = []
