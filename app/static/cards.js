@@ -42,6 +42,7 @@ function initializeFilmCards() {
 
         // Ajouter des listeners aux boutons d'action
         const actionButtons = card.querySelectorAll(".btn");
+        
 
         actionButtons.forEach(btn => {
             btn.addEventListener("click", () => {
@@ -51,6 +52,7 @@ function initializeFilmCards() {
 
                 // Activer celui-ci
                 btn.classList.add("active");
+
             });
         });
 
