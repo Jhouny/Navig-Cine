@@ -28,6 +28,7 @@ def query_sparql():
 
     try:
         results = sparql.query().convert()
+        print(results)
         convertedResults = convertSPARQLOutputToDico(results)
 
         return jsonify(convertedResults), 200

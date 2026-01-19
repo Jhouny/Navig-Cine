@@ -24,5 +24,5 @@ def convertSPARQLOutputToDico(results):
 
         dico_genres_films.setdefault(genre_clean, []).append(film_clean)
         dico_films_descriptions[film_clean] = description_clean
-
+    
     return dico
