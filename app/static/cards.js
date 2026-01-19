@@ -58,7 +58,6 @@ function initializeFilmCards() {
 
     });
 }
-initializeFilmCards();
 
 function getRandomFilm(category, card) {
     const list = filmsByCategory[category] || [];
