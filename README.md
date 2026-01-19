@@ -1,21 +1,14 @@
 # Navig-Cine
+This system is an application of knowledge graphs for movie recommendation and exploration. It leverages a local GraphDB server to store and query movie data, and a Flask-based frontend to provide an interactive user interface.
 
-## TODO LIST
-
-### Frontend
-
-- [ ] Lancer requête initiale pour récupérer les genres principaux et liste de films associés & Stocker
-- [ ] Proposer de façon aléatoire les films et demander like/nolike/skip (conserver en mémoire pour ne pas reproposer)
-
-## Application Start
+## Running the Application
 
 ### Launch Local GraphDB Server
 
-- Launch Docker : docker compose up
-- Go to localhost:7200, create repository "Gdb-Navig-Cine" and import turtle files
+- Launch Docker : `docker compose up --build -d`
 
 ### Launch Frontend Flask Server
 
-- Create venv : python3 -m venv .venv
-- Download requirement : pip install -r requirements.txt
-- Launch server : python3 app/app.py
+- Create venv : `python3 -m venv .venv`
+- Download requirement : `pip install -r requirements.txt`
+- Launch server : `python3 app/app.py`
