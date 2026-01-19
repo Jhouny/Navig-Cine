@@ -1,0 +1,9 @@
+services:
+  local-graphdb:
+    container_name: local-graphdb
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: no
+    ports:
+      - "7201:7200"
