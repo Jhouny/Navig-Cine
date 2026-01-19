@@ -14,6 +14,7 @@ filmsInfos = {
 // Les films seront récupérés dans le serveur GraphDB
 
 async function createFilmCards() {
+
     const dicos = await fetchFilmsAndGenre();
     console.log("Genres fetched from SPARQL:", dicos);
     filmsByCategory = dicos["genres"];
@@ -31,19 +32,26 @@ async function createFilmCards() {
         .slice(0, 5);
 
     categories.forEach(category => {
+        const films = [];
+
+        while (films.length < 2) {
+            const film = getUnusedFilmFromCategory(category);
+            if (!film){
+                // plus rien de dispo
+                notAvailabe = true;
+                break;
+            }; 
+            films.push(film);
+        }
         
+        //if(notAvailabe) continue;
+
         // Créer la section pour chacune des catégories
         const row = document.createElement("section");
         row.classList.add("film-row");
 
         // on prend 2 films par ligne pour l'affichage
-        const films = [];
 
-        while (films.length < 2) {
-            const film = getUnusedFilmFromCategory(category);
-            if (!film) break; // plus rien de dispo
-            films.push(film);
-        }
 
         films.forEach(filmTitle => {
 
