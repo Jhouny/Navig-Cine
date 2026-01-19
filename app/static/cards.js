@@ -98,6 +98,7 @@ async function createFilmCards() {
 
         filmList.appendChild(row);
     });
+    initializeFilmCards();
 
 }
 
@@ -119,7 +120,7 @@ function isFilmAlreadyAdded(filmTitle) {
         .some(card => card.dataset.film === filmTitle);
 }
 
-function initializeFilmCards() {
+async function initializeFilmCards() {
     console.log("film cards:", document.querySelectorAll(".film-card").length);
 
     document.querySelectorAll(".film-card").forEach(card => {

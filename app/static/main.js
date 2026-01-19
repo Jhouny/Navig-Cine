@@ -7,11 +7,9 @@ async function init() {
 
     // Initialiser les cartes de films
     createFilmCards();
-    initializeFilmCards();
 
     // Charger les genres depuis SPARQL
-    const genres = await fetchFilmsAndGenre();
-    console.log("Genres fetched from SPARQL:", genres);
+
     // genres.forEach(result => {
     //     const genre = result.genre.value;
     //     const count = result.count.value;
