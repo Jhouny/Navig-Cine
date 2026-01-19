@@ -15,6 +15,7 @@ async function init() {
     getRecommendations(profil);
 
     // Initialiser les cartes de films
+    createFilmCards();
     initializeFilmCards();
 
     // Charger les genres depuis SPARQL
