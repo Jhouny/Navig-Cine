@@ -17,7 +17,7 @@ def query_sparql():
     if not query:
         return jsonify({"error": "No query provided"}), 400
 
-    sparql = SPARQLWrapper("http://localhost:7200/repositories/Gdb-Navig-Cine")
+    sparql = SPARQLWrapper("http://10.56.62.206:7200/repositories/Gdb-Navig-Cine")
     sparql.setMethod(GET)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
