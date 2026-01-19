@@ -3,6 +3,7 @@ from flask_cors import CORS
 from SPARQLWrapper import SPARQLWrapper, JSON, RDFXML, GET
 
 from reco_profile import get_reco
+from utils import convertSPARQLOutputToDico
 
 app = Flask(__name__)
 CORS(app)
@@ -26,8 +27,9 @@ def query_sparql():
 
     try:
         results = sparql.query().convert()
-        print("results:", results)
-        return jsonify(results)
+        convertedResults = convertSPARQLOutputToDico(results)
+
+        return jsonify(convertedResults), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     
@@ -35,12 +37,15 @@ def query_sparql():
 @app.route('/api/reco', methods=['GET', 'POST'])
 def get_recommandations():
     try:
-        print("Received recommendation request: ", request.args)
+        # print("Received recommendation request: ", request.json)
+        # print("=================")
         user_profil = request.json.get('profil')
+        # print("User profil: ", user_profil)
+        # print("=================")
 
         # Appel de votre fonction Python locale
-        recommendations = get_reco(user_profil)
-        print("Recommendations: ", recommendations)
+        recommendations = get_reco(user_profil, query ="default", test=True)
+        # print("Recommendations: ", recommendations)
         
         return jsonify(recommendations), 200
     except Exception as e:

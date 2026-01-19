@@ -18,12 +18,13 @@ async function init() {
     initializeFilmCards();
 
     // Charger les genres depuis SPARQL
-    const genres = await fetchGenresFromSPARQL();
-    genres.forEach(result => {
-        const genre = result.genre.value;
-        const count = result.count.value;
-        console.log(`Genre: ${genre}, Films: ${count}`);
-    });
+    const genres = await fetchFilmsAndGenre();
+    console.log("Genres fetched from SPARQL:", genres);
+    // genres.forEach(result => {
+    //     const genre = result.genre.value;
+    //     const count = result.count.value;
+    //     console.log(`Genre: ${genre}, Films: ${count}`);
+    // });
 
     // Configurer le bouton de soumission
     const submitBtn = document.getElementById('submit-ratings');
