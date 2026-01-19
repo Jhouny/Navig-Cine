@@ -102,6 +102,6 @@ def get_reco(profil, query ="default", test=False):
     return res
 
 # Lancement de la requête
-profil = {'Films' : {},'genres' : {'dbr:Fantasy_comedy':10}, 'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4, 'dbr:Jessica_Tuck' : 2}}
-df_reco = get_reco(profil)
-print(df_reco)
+#profil = {'Films' : {},'genres' : {'dbr:Fantasy_comedy':10}, 'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4, 'dbr:Jessica_Tuck' : 2}}
+#df_reco = get_reco(profil)
+#print(df_reco)

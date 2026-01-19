@@ -13,7 +13,8 @@ def home():
 
 @app.route('/sparql', methods=['GET'])
 def query_sparql():
-    print("Received SPARQL query request: ", request.args)
+    #print("Received SPARQL query request: ", request.args)
+    
     # Récupération de la requête passée en paramètre d'URL
     query = request.args.get('query')
     
