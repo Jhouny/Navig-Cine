@@ -1,15 +1,23 @@
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
-from SPARQLWrapper import SPARQLWrapper, JSON, RDFXML, GET
+from SPARQLWrapper import SPARQLWrapper, JSON, GET
 
 from reco_profile import get_reco
 from utils import convertSPARQLOutputToDico
+
+recommendations_cache = {}  # Dictionnaire pour stocker les recommandations en cache
 
 app = Flask(__name__)
 CORS(app)
 @app.route("/")
 def home():
     return render_template("index.html")
+
+@app.route("/recommendations")
+def recommendations():
+    uid = request.args.get('uid')
+    recommandations = recommendations_cache.get(uid, [])
+    return render_template("recommendations/index.html", recommandations=recommandations)
 
 @app.route('/sparql', methods=['GET'])
 def query_sparql():
@@ -36,19 +44,15 @@ def query_sparql():
         return jsonify({"error": str(e)}), 500
     
 
-@app.route('/api/reco', methods=['GET', 'POST'])
+@app.route('/api/reco', methods=['POST'])
 def get_recommandations():
     try:
-        # print("Received recommendation request: ", request.json)
-        # print("=================")
         user_profil = request.json.get('profil')
-        # print("User profil: ", user_profil)
-        # print("=================")
-
+        uid = request.json.get('uid')
         # Appel de votre fonction Python locale
-        recommendations = get_reco(user_profil, query ="default", test=True)
-        # print("Recommendations: ", recommendations)
-        
+        recommendations = get_reco(user_profil, query="default", test=True)
+        recommendations_cache[uid] = recommendations  # Stockage des recommandations dans le cache
+        print("Generated recommendations:", recommendations)
         return jsonify(recommendations), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500

@@ -88,22 +88,14 @@ function checkMarked() {
     return allValid;
 }
 
-function getRecommendations(userProfil) {
-    // const ok = checkMarked();
-
-    // if (!ok) {
-    //     alert("Merci de noter tous les films avant d’obtenir des recommandations.");
-    //     return;
-    // }
-
-    console.log("Toutes les cartes sont notées. Recommandations à venir.");
+function getRecommendations(userProfil, uid) {
     // Faire une requête POST au serveur Flask vers l'endpoint /recommendations
     fetch("/api/reco", {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify({ profil: userProfil })
+        body: JSON.stringify({ profil: userProfil, uid: uid })
     })
     .then(response => {
         if (!response.ok) {
@@ -114,16 +106,31 @@ function getRecommendations(userProfil) {
 }
 
 function sendRatings() {
+    const ok = checkMarked();
+    if (!ok) {
+        alert("Veuillez évaluer tous les films avant de continuer.");
+        return;
+    }
+    
     // Construction du profil utilisateur 
     const cards = document.querySelectorAll(".film-card");
-    const userProfil = {};
+    const userProfil = {
+        'Films' : {},
+        'genres' : {},
+        'realisateurs' : {},
+        'acteurs' : {}
+    };
     cards.forEach(card => {
         const film = card.dataset.film;
         const activeBtn = card.querySelector(".btn.active");
         const rating = activeBtn ? activeBtn.dataset.rating : null;
-        userProfil[film] = rating;
+        userProfil['Films'][film] = rating;
     });
 
+    const uid = Math.random().toString(16).slice(2);
+
     console.log("Profil utilisateur :", userProfil);
-    getRecommendations(userProfil);
+    getRecommendations(userProfil, uid);
+    // Rediriger vers la page des recommandations
+    window.location.href = `/recommendations?uid=` + encodeURIComponent(uid);
 }

@@ -10,8 +10,8 @@ def get_reco(profil, query ="default", test=False):
     string_de_genres = ", ".join(genres.keys())
     string_de_realisateurs = ", ".join(realisateurs.keys())
     string_dacteurs = ", ".join(acteurs.keys())
-    
-    
+
+  
     if (query == "default"):
         query = f"""
         PREFIX dbo: <http://dbpedia.org/ontology/>
