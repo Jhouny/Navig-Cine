@@ -37,7 +37,13 @@ async function createFilmCards() {
         row.classList.add("film-row");
 
         // on prend 2 films par ligne pour l'affichage
-        const films = filmsByCategory[category].slice(0, 2);
+        const films = [];
+
+        while (films.length < 2) {
+            const film = getUnusedFilmFromCategory(category);
+            if (!film) break; // plus rien de dispo
+            films.push(film);
+        }
 
         films.forEach(filmTitle => {
 
@@ -86,6 +92,24 @@ async function createFilmCards() {
         filmList.appendChild(row);
     });
 
+}
+
+function getUnusedFilmFromCategory(category) {
+    const films = filmsByCategory[category] || [];
+
+    const available = films.filter(
+        film => !isFilmAlreadyAdded(film)
+    );
+
+    if (available.length === 0) return null;
+
+    const idx = Math.floor(Math.random() * available.length);
+    return available[idx];
+}
+
+function isFilmAlreadyAdded(filmTitle) {
+    return [...document.querySelectorAll(".film-card")]
+        .some(card => card.dataset.film === filmTitle);
 }
 
 function initializeFilmCards() {
