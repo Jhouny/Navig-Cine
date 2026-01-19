@@ -1,4 +1,4 @@
-#from SPARQLWrapper import SPARQLWrapper, JSON
+from SPARQLWrapper import SPARQLWrapper, JSON
 import heapq
 
 def get_reco(profil, query ="default", test=False):
@@ -35,7 +35,7 @@ def get_reco(profil, query ="default", test=False):
         """
     
     if (not test) :
-        sparql = SPARQLWrapper("https://fr.dbpedia.org/sparql")
+        sparql = SPARQLWrapper("http://10.56.62.206:7200/repositories/Gdb-Navig-Cine")
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
@@ -61,6 +61,7 @@ def get_reco(profil, query ="default", test=False):
     
     # Requête et transformation du résultats en pandas dataframe
     data_priorQ = []
+    i= 0
     for result in results["results"]["bindings"]:
         score = 0
         liste_dacteurs = result.get("actors", {}).get("value", "N/A").split(", ")
@@ -69,34 +70,41 @@ def get_reco(profil, query ="default", test=False):
 
         
         for acteur in liste_dacteurs:
+            acteur = acteur.replace("http://dbpedia.org/resource/", "dbr:" )
             if(acteur in profil.get("acteurs").keys()):
                 score += profil.get("acteurs").get(acteur)
 
         for real in liste_de_reals:
+            real = real.replace("http://dbpedia.org/resource/", "dbr:" )
+            print(real)
+            print(f" in {profil.get('realisateurs').keys()} ?")
             if(real in profil.get("realisateurs").keys()):
+                print ("yesss !")
                 score += profil.get("realisateurs").get(real)
 
         for genre in liste_de_genres:
+            genre = genre.replace("http://dbpedia.org/resource/", "dbr:" )
             if(genre in profil.get("genres").keys()):
                 score += profil.get("genres").get(genre)
         
-        heapq.heappush(data_priorQ, (-score, {
+        heapq.heappush(data_priorQ, (-score, i, {
             "Film": result.get("film", {}).get("value", "N/A"),
             "Realisateurs" : liste_de_reals,
             "Acteurs": liste_dacteurs,
             "Genres": liste_de_genres,
             "Score": score
         }))
+        i +=1
 
     res = []
     while data_priorQ :
-        task = heapq.heappop(data_priorQ)[1]
+        task = heapq.heappop(data_priorQ)[2]
         res.append(task)
             
         
     return res
 
 # Lancement de la requête
-profil = {'Films' : {},'genres' : {'dbr:Fantasy_comedy':10}, 'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4}}
-df_reco = get_reco(profil,test=True)
+profil = {'Films' : {},'genres' : {'dbr:Fantasy_comedy':10}, 'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4, 'dbr:Jessica_Tuck' : 2}}
+df_reco = get_reco(profil)
 print(df_reco)
