@@ -222,17 +222,48 @@ function sendRatings() {
         'realisateurs' : {},
         'acteurs' : {}
     };
+
+    
     cards.forEach(card => {
         const film = card.dataset.film;
         const activeBtn = card.querySelector(".btn.active");
-        const rating = activeBtn ? activeBtn.dataset.rating : null;
-        userProfil['Films'][film] = rating;
+
+        if (!activeBtn) return;
+
+        let score = 0;
+        if (activeBtn.classList.contains("like")) score = 1;
+        else if (activeBtn.classList.contains("dislike")) score = -1;
+        else if (activeBtn.classList.contains("skip")) score = 0;
+
+        userProfil.Films[film] = score;
+
+        const meta = filmsInfos[film];
+        const genres = filmsByCategory;
+        if (!meta) return;
+
+        Object.entries(filmsByCategory).forEach(([genre, films]) => {
+            if (films.includes(film)) {
+                userProfil.genres[genre] = (userProfil.genres[genre] || 0) + score;
+            }
+        });
+
+        // --- Réalisateurs ---
+        meta.realisateurs?.forEach(r => {
+            userProfil.realisateurs[r] = (userProfil.realisateurs[r] || 0) + score;
+        });
+
+        // --- Acteurs ---
+        meta.acteurs?.forEach(a => {
+            userProfil.acteurs[a] = (userProfil.acteurs[a] || 0) + score;
+        });
     });
 
     const uid = Math.random().toString(16).slice(2);
 
     console.log("Profil utilisateur :", userProfil);
+
     getRecommendations(userProfil, uid);
-    // Rediriger vers la page des recommandations
+
     window.location.href = `/recommendations?uid=` + encodeURIComponent(uid);
 }
+

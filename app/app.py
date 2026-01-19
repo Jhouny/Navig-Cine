@@ -51,13 +51,13 @@ def get_recommandations():
         user_profil = request.json.get('profil')
         uid = request.json.get('uid')
         # Appel de votre fonction Python locale
-        recommendations = get_reco(user_profil, query="default", test=True)
+        recommendations = get_reco(user_profil, query="default", test=False)
         recommendations_cache[uid] = recommendations  # Stockage des recommandations dans le cache
         print("Generated recommendations:", recommendations)
         return jsonify(recommendations), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
-
+    
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
