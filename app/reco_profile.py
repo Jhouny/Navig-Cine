@@ -1,5 +1,5 @@
 #from SPARQLWrapper import SPARQLWrapper, JSON
-import pandas as pd
+import heapq
 
 def get_reco(profil, query ="default", test=False):
 
@@ -60,7 +60,7 @@ def get_reco(profil, query ="default", test=False):
                     }
     
     # Requête et transformation du résultats en pandas dataframe
-    data = []
+    data_priorQ = []
     for result in results["results"]["bindings"]:
         score = 0
         liste_dacteurs = result.get("actors", {}).get("value", "N/A").split(", ")
@@ -80,16 +80,22 @@ def get_reco(profil, query ="default", test=False):
             if(genre in profil.get("genres").keys()):
                 score += profil.get("genres").get(genre)
         
-        data.append({#possibilité de faire une prior queue ? 
+        heapq.heappush(data_priorQ, (score, {
             "Film": result.get("film", {}).get("value", "N/A"),
             "Realisateurs" : liste_de_reals,
             "Acteurs": liste_dacteurs,
             "Genres": liste_de_genres,
             "Score": score
-        })
-    return pd.DataFrame(data).sort_values("Score", ascending=False)
+        }))
+
+        res = []
+        for i in range len(data) :
+            priority, task = heapq.heappop(data_priorQ)
+            
+        
+    return data_priorQ
 
 # Lancement de la requête
 profil = {'Films' : {},'genres' : {'dbr:Fantasy_comedy':10}, 'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4}}
 df_reco = get_reco(profil,test=True)
-print(df_reco.head())
+print(df_reco[:5])
