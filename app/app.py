@@ -3,7 +3,7 @@ from flask_cors import CORS
 from SPARQLWrapper import SPARQLWrapper, JSON, GET
 
 from reco_profile import get_reco
-from utils import convertSPARQLOutputToDico
+from utils import convertSPARQLOutputToDico, keepTopNResults
 
 recommendations_cache = {}  # Dictionnaire pour stocker les recommandations en cache
 
@@ -37,8 +37,10 @@ def query_sparql():
     try:
         results = sparql.query().convert()
         convertedResults = convertSPARQLOutputToDico(results)
+        topN = 5
+        results_limited = keepTopNResults(convertedResults["results"]["bindings"]["genres"], topN)
 
-        return jsonify(convertedResults), 200
+        return jsonify(results_limited), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
     

@@ -19,17 +19,18 @@ def convertSPARQLOutputToDico(results):
         description = row.get("description", {}).get("value", "N/A")
         starring = row.get("starring", {}).get("value", "N/A")
         director = row.get("director", {}).get("value", "N/A")
+        image = row.get("image", {}).get("value", "N/A")
         
         film_clean = removePathPrefix(film)
         genre_clean = removePathPrefix(genre)
         description_clean = removePathPrefix(description)
         starring_clean = removePathPrefix(starring)
         director_clean = removePathPrefix(director)
+        image_clean = removePathPrefix(image)
 
         dico_genres_films.setdefault(genre_clean, []).append(film_clean)
-        dico_films_descriptions.setdefault(film_clean, {"description": description_clean, "starring": [], "director": []})
+        dico_films_descriptions.setdefault(film_clean, {"description": description_clean, "starring": [], "director": director_clean, "image": image_clean})
         dico_films_descriptions[film_clean]["starring"].append(starring_clean)
-        dico_films_descriptions[film_clean]["director"].append(director_clean)
     
     return dico
 
@@ -41,3 +42,4 @@ def keepTopNResults(results, N):
     results["results"]["bindings"] = topN_genres
 
     return results
+
