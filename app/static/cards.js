@@ -2,22 +2,92 @@
  * Gestion de l'interface des cartes de films
  */
 
-const ratings = {};
+ratings = {};
 
-const filmsByCategory = {
-    "science-fiction": ["Inception", "Interstellar", "Blade Runner", "Matrix", "Ex Machina"],
-    "romance": ["Amélie", "Titanic", "La La Land", "Pride & Prejudice", "Her"],
-    "action": ["Mad Max", "John Wick", "Die Hard", "Gladiator", "The Dark Knight"],
-    "comedy": ["Superbad", "The Hangover", "Monty Python", "Step Brothers", "Bridesmaids"],
-    "horror": ["Get Out", "It", "The Shining", "A Quiet Place", "Hereditary"]
+filmsByCategory = {
+
+};
+
+filmsInfos = {
 };
 
 // Les films seront récupérés dans le serveur GraphDB
 
-function createFilmCards() {
-    dicos = fetchFilmsAndGenre();
-    print("dicos:", dicos);
+async function createFilmCards() {
+    const dicos = await fetchFilmsAndGenre();
+    console.log("Genres fetched from SPARQL:", dicos);
+    filmsByCategory = dicos["genres"];
+    filmsInfos = dicos["films"];
+
+    console.log(filmsByCategory);
+    console.log(filmsInfos);
+
+    const filmList = document.querySelector(".film-list");
+    filmList.innerHTML = "";
+    
+    // Choisir 5 catégories aléatoires
+    const categories = Object.keys(filmsByCategory)
+        .sort(() => Math.random() - 0.5)
+        .slice(0, 5);
+
+    categories.forEach(category => {
+        
+        // Créer la section pour chacune des catégories
+        const row = document.createElement("section");
+        row.classList.add("film-row");
+
+        // on prend 2 films par ligne pour l'affichage
+        const films = filmsByCategory[category].slice(0, 2);
+
+        films.forEach(filmTitle => {
+
+            // Créer la carte de chacun de film et y mettre les bonnes infos
+            const card = document.createElement("div");
+            card.classList.add("film-card");
+            card.dataset.film = filmTitle;
+            card.dataset.category = category;
+            card.dataset.director = filmsInfos[filmTitle]["director"];
+            card.dataset.actors = filmsInfos[filmTitle]["actors"];
+
+            const img = document.createElement("img");
+            img.classList.add("poster");
+            img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+
+            // Affichage de la carte
+            const info = document.createElement("div");
+            info.classList.add("film-info");
+
+            const h3 = document.createElement("h3");
+            h3.textContent = filmTitle;
+
+            const p = document.createElement("p");
+            p.textContent = filmsInfos[filmTitle]["description"] || "Description indisponible.";
+
+            // Boutons (like, dislike)
+            const actions = document.createElement("div");
+            actions.classList.add("actions");
+
+            actions.innerHTML = `
+                <button class="btn like">👍 Like</button>
+                <button class="btn dislike">👎 Dislike</button>
+                <button class="btn skip">⏭ Didn’t watch</button>
+            `;
+
+            info.appendChild(h3);
+            info.appendChild(p);
+            info.appendChild(actions);
+
+            card.appendChild(img);
+            card.appendChild(info);
+
+            row.appendChild(card);
+        });
+
+        filmList.appendChild(row);
+    });
+
 }
+
 function initializeFilmCards() {
     console.log("film cards:", document.querySelectorAll(".film-card").length);
 
