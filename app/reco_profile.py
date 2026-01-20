@@ -135,18 +135,20 @@ def get_reco(profil, query ="default", test=False):
         
     return res
 
-# Lancement de la requête
-profil = {
-    'Films' : {},
-    'genres' : {'dbr:Science_fiction':10}, 
-    'realisateurs' : {'dbr:David_Frankel' : 2, 
-                      'dbr:James_Cameron' : 1, 
-                      'dbr:Christopher_Nolan' : 11},
-    'acteurs' : {'dbr:Anne_Hathaway':1, 
-                 'dbr:Tom_Cruise':1, 
-                 'dbr:Meryl_Streep':4, 
-                 'dbr:Jessica_Tuck' : 2}
-        }
-requete_naturelle = "les films réalisés par Blair Treu"
-df_reco = get_reco(profil)
-print(df_reco)
+
+if __name__ == "__main__":
+    # Lancement de la requête
+    profil = {
+        'Films' : {},
+        'genres' : {'dbr:Science_fiction':10}, 
+        'realisateurs' : {'dbr:David_Frankel' : 2, 
+                        'dbr:James_Cameron' : 1, 
+                        'dbr:Christopher_Nolan' : 11},
+        'acteurs' : {'dbr:Anne_Hathaway':1, 
+                    'dbr:Tom_Cruise':1, 
+                    'dbr:Meryl_Streep':4, 
+                    'dbr:Jessica_Tuck' : 2}
+            }
+    requete_naturelle = "les films réalisés par Blair Treu"
+    df_reco = get_reco_par_requete_naturelle(profil, requete_naturelle)
+    print(df_reco)
