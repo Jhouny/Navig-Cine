@@ -31,13 +31,14 @@ def get_reco_par_requete_naturelle(profil, requete_naturelle):
 
 def get_reco(profil, query ="default", test=False):
 
+    #print(f'-------- into get_reco\nprofil envoyé : {profil}')
     genres = profil.get("genres")
     realisateurs = profil.get("realisateurs")
     acteurs = profil.get("acteurs")
 
-    string_de_genres = ", ".join(genres.keys())
-    string_de_realisateurs = ", ".join(realisateurs.keys())
-    string_dacteurs = ", ".join(acteurs.keys())
+    string_de_genres = ", ".join(f"<{g}>" for g in genres.keys())
+    string_de_realisateurs = ", ".join(f"<{g}>" for g in realisateurs.keys())
+    string_dacteurs = ", ".join(f"<{g}>" for g in acteurs.keys())
 
   
     if (query == "default"):
@@ -63,10 +64,12 @@ def get_reco(profil, query ="default", test=False):
         """
     
     if (not test) :
+        #print(f'-----query : {query}')
         sparql = SPARQLWrapper("http://127.0.0.1:7201/repositories/Gdb-Navig-Cine")
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
+        #print(f'-----results : {results}')
     else :
         results = {
                     "results": {
@@ -134,19 +137,19 @@ def get_reco(profil, query ="default", test=False):
             
         
     return res
-
-# Lancement de la requête
-profil = {
-    'Films' : {},
-    'genres' : {'dbr:Science_fiction':10}, 
-    'realisateurs' : {'dbr:David_Frankel' : 2, 
-                      'dbr:James_Cameron' : 1, 
-                      'dbr:Christopher_Nolan' : 11},
-    'acteurs' : {'dbr:Anne_Hathaway':1, 
-                 'dbr:Tom_Cruise':1, 
-                 'dbr:Meryl_Streep':4, 
-                 'dbr:Jessica_Tuck' : 2}
-        }
-requete_naturelle = "les films réalisés par Blair Treu"
-df_reco = get_reco(profil)
-print(df_reco)
+if __name__ == "__main__":
+    # Lancement de la requête
+    profil = {
+        'Films' : {},
+        'genres' : {'dbr:Science_fiction':10}, 
+        'realisateurs' : {'dbr:David_Frankel' : 2, 
+                        'dbr:James_Cameron' : 1, 
+                        'dbr:Christopher_Nolan' : 11},
+        'acteurs' : {'dbr:Anne_Hathaway':1, 
+                    'dbr:Tom_Cruise':1, 
+                    'dbr:Meryl_Streep':4, 
+                    'dbr:Jessica_Tuck' : 2}
+            }
+    requete_naturelle = "les films réalisés par Blair Treu"
+    df_reco = get_reco(profil)
+    #print(df_reco)

@@ -21,11 +21,18 @@ def convertSPARQLOutputToDico(results):
         director = row.get("director", {}).get("value", "N/A")
         #image = row.get("image", {}).get("value", "N/A")
         
+        # film_clean = removePathPrefix(film)
+        # genre_clean = removePathPrefix(genre)
+        # description_clean = removePathPrefix(description)
+        # starring_clean = removePathPrefix(starring)
+        # director_clean = removePathPrefix(director)
+
         film_clean = removePathPrefix(film)
-        genre_clean = removePathPrefix(genre)
+        genre_clean = genre
         description_clean = removePathPrefix(description)
-        starring_clean = removePathPrefix(starring)
-        director_clean = removePathPrefix(director)
+        starring_clean = starring
+        director_clean = director
+
         #image_clean = removePathPrefix(image)
 
         dico_genres_films.setdefault(genre_clean, []).append(film_clean)
