@@ -8,4 +8,8 @@ COPY data/conf/ /opt/graphdb/dist/conf/
 COPY data/repositories/ /opt/graphdb/dist/data/repositories/
 COPY data/import/ /opt/graphdb/dist/data/import/
 
-ENTRYPOINT [ "/opt/graphdb/dist/bin/graphdb" ]
+# Copy the custom entrypoint script and make it executable
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+ENTRYPOINT [ "/entrypoint.sh" ]
