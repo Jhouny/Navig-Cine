@@ -1,6 +1,7 @@
 services:
   local-graphdb:
     container_name: local-graphdb
+    image: navig-cine-local-graphdb
     build:
       context: .
       dockerfile: Dockerfile

@@ -150,5 +150,5 @@ if __name__ == "__main__":
                     'dbr:Jessica_Tuck' : 2}
             }
     requete_naturelle = "les films réalisés par Blair Treu"
-    df_reco = get_reco_par_requete_naturelle(profil, requete_naturelle)
+    df_reco = get_reco(profil)
     print(df_reco)
