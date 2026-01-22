@@ -39,7 +39,6 @@ def get_reco(profil, query ="default", test=False):
     string_de_genres = ", ".join(f"<{g}>" for g in genres.keys())
     string_de_realisateurs = ", ".join(f"<{g}>" for g in realisateurs.keys())
     string_dacteurs = ", ".join(f"<{g}>" for g in acteurs.keys())
-
   
     if (query == "default"):
         query = f"""
@@ -136,9 +135,13 @@ def get_reco(profil, query ="default", test=False):
     # Remove dbpedia prefixes
     for r in res:
         r["Film"] = r["Film"].replace("http://dbpedia.org/resource/", "")
+        r["Film"] = r["Film"].replace("dbr:", "")
         r["Realisateurs"] = [real.replace("http://dbpedia.org/resource/", "") for real in r["Realisateurs"]]
+        r["Realisateurs"] = [real.replace("dbr:", "") for real in r["Realisateurs"]]
         r["Acteurs"] = [actor.replace("http://dbpedia.org/resource/", "") for actor in r["Acteurs"]]
+        r["Acteurs"] = [actor.replace("dbr:", "") for actor in r["Acteurs"]]
         r["Genres"] = [genre.replace("http://dbpedia.org/resource/", "") for genre in r["Genres"]]
+        r["Genres"] = [genre.replace("dbr:", "") for genre in r["Genres"]]
     
     # Replace underlines with spaces for better readability
     for r in res:
@@ -149,9 +152,9 @@ def get_reco(profil, query ="default", test=False):
     
     # Drop empty items from lists
     for r in res:
-        r["Realisateurs"] = [real for real in r["Realisateurs"] if real != ""]
-        r["Acteurs"] = [actor for actor in r["Acteurs"] if actor != ""]
-        r["Genres"] = [genre for genre in r["Genres"] if genre != ""]
+        r["Realisateurs"] = [real for real in r["Realisateurs"] if real not in ["", "N/A"]]
+        r["Acteurs"] = [actor for actor in r["Acteurs"] if actor not in ["", "N/A"]]
+        r["Genres"] = [genre for genre in r["Genres"] if genre not in ["", "N/A"]]
         
     return res
 

@@ -334,7 +334,7 @@ function sendRatings() {
 
     getRecommendations(userProfil, uid);
 
-    //window.location.href = `/recommendations?uid=` + encodeURIComponent(uid);
+    window.location.href = `/recommendations?uid=` + encodeURIComponent(uid);
 }
 
 function isValidValue(v) {

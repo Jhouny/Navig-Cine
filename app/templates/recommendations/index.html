@@ -12,10 +12,8 @@
         </header>
 
         <section class="recommendation-list" id="recommendation-list">
-            {{recommandations}}
-            <br>
             {% for recommendation in recommandations[:20] %}
-            <div class="film-card" data-film="{{ recommendation['Film'] }}" data-category="science-fiction">
+            <div class="film-card film-row" data-film="{{ recommendation['Film'] }}" data-category="science-fiction">
                 <img class="poster" src="https://picsum.photos/800/400?random=2">
                 <div class="film-info">
                     <h3>{{ recommendation['Film'] }}</h3>
