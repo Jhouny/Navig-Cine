@@ -14,13 +14,20 @@
         <section class="recommendation-list" id="recommendation-list">
             {{recommandations}}
             <br>
-            {% for recommendation in recommandations %}
+            {% for recommendation in recommandations[:20] %}
             <div class="film-card" data-film="{{ recommendation['Film'] }}" data-category="science-fiction">
                 <img class="poster" src="https://picsum.photos/800/400?random=2">
                 <div class="film-info">
                     <h3>{{ recommendation['Film'] }}</h3>
-                    <p>Description</p>
-                    <p></p>
+                    {% if recommendation['Realisateurs'].__len__() > 0 %}
+                    <p>Realisateurs: {{ recommendation['Realisateurs'] | join(', ') }}</p>
+                    {% endif %}
+                    {% if recommendation['Acteurs'].__len__() > 0 %}
+                    <p>Acteurs: {{ recommendation['Acteurs'] | join(', ') }}</p>
+                    {% endif %}
+                    {% if recommendation['Genres'].__len__() > 0 %}
+                    <p>Genres: {{ recommendation['Genres'] | join(', ') }}</p>
+                    {% endif %}
                 </div>
             </div>
             {% endfor %}

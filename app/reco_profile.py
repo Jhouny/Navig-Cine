@@ -135,6 +135,25 @@ def get_reco(profil, query ="default", test=False):
         task = heapq.heappop(data_priorQ)[2]
         res.append(task)
             
+    # Remove dbpedia prefixes
+    for r in res:
+        r["Film"] = r["Film"].replace("http://dbpedia.org/resource/", "")
+        r["Realisateurs"] = [real.replace("http://dbpedia.org/resource/", "") for real in r["Realisateurs"]]
+        r["Acteurs"] = [actor.replace("http://dbpedia.org/resource/", "") for actor in r["Acteurs"]]
+        r["Genres"] = [genre.replace("http://dbpedia.org/resource/", "") for genre in r["Genres"]]
+    
+    # Replace underlines with spaces for better readability
+    for r in res:
+        r["Film"] = r["Film"].replace("_", " ")
+        r["Realisateurs"] = [real.replace("_", " ") for real in r["Realisateurs"]]
+        r["Acteurs"] = [actor.replace("_", " ") for actor in r["Acteurs"]]
+        r["Genres"] = [genre.replace("_", " ") for genre in r["Genres"]]
+    
+    # Drop empty items from lists
+    for r in res:
+        r["Realisateurs"] = [real for real in r["Realisateurs"] if real != ""]
+        r["Acteurs"] = [actor for actor in r["Acteurs"] if actor != ""]
+        r["Genres"] = [genre for genre in r["Genres"] if genre != ""]
         
     return res
 if __name__ == "__main__":

@@ -83,7 +83,7 @@ async function createFilmCards() {
             actions.innerHTML = `
                 <button class="btn like">👍 Like</button>
                 <button class="btn dislike">👎 Dislike</button>
-                <button class="btn skip">⏭ Didn’t watch</button>
+                <button class="btn skip">⏭ Didn't watch</button>
             `;
 
             info.appendChild(h3);
@@ -247,6 +247,7 @@ function sendRatings() {
         });
 
         normalizeToArray(meta.director).forEach(director => {
+            console.log("Director:", director);
             userProfil.realisateurs[director] =
                 (userProfil.realisateurs[director] || 0) + score;
         });
@@ -264,7 +265,7 @@ function sendRatings() {
 
     getRecommendations(userProfil, uid);
 
-    window.location.href = `/recommendations?uid=` + encodeURIComponent(uid);
+    //window.location.href = `/recommendations?uid=` + encodeURIComponent(uid);
 }
 
 function isValidValue(v) {
