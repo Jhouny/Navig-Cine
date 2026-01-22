@@ -1,7 +1,7 @@
 FROM ontotext/graphdb:11.2.0
 
 RUN mkdir -p /opt/graphdb/dist/conf \
-    && mkdir -p /opt/graogdb/dist/data/repositories \
+    && mkdir -p /opt/graphdb/dist/data/repositories \
     && mkdir -p /opt/graphdb/dist/data/import
 
 COPY data/conf/ /opt/graphdb/dist/conf/
@@ -12,4 +12,4 @@ COPY data/import/ /opt/graphdb/dist/data/import/
 COPY entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
-ENTRYPOINT [ "/entrypoint.sh" ]
+ENTRYPOINT ["/entrypoint.sh"]

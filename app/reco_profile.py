@@ -64,12 +64,10 @@ def get_reco(profil, query ="default", test=False):
         """
     
     if (not test) :
-        #print(f'-----query : {query}')
         sparql = SPARQLWrapper("http://127.0.0.1:7201/repositories/Gdb-Navig-Cine")
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
-        #print(f'-----results : {results}')
     else :
         results = {
                     "results": {
@@ -156,6 +154,8 @@ def get_reco(profil, query ="default", test=False):
         r["Genres"] = [genre for genre in r["Genres"] if genre != ""]
         
     return res
+
+
 if __name__ == "__main__":
     # Lancement de la requête
     profil = {
@@ -171,4 +171,4 @@ if __name__ == "__main__":
             }
     requete_naturelle = "les films réalisés par Blair Treu"
     df_reco = get_reco(profil)
-    #print(df_reco)
+    print(df_reco)
