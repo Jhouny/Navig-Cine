@@ -83,7 +83,7 @@ async function fetchFilmsAndGenre() {
     		OPTIONAL {?film dbo:description ?description .}
     		OPTIONAL {?film dbo:starring ?starring .}
     		OPTIONAL {?film dbo:director ?director .}
-            OPTIONAL {?film dbo:image ?director .}
+            OPTIONAL {?film dbo:thumbnail ?image .}
         }
     `;
 

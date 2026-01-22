@@ -43,8 +43,6 @@ async function createFilmCards() {
             films.push(film);
         }
 
-        //if(notAvailabe) continue;
-
         // Créer la section pour chacune des catégories
         const row = document.createElement("section");
         row.classList.add("film-row");
@@ -64,7 +62,38 @@ async function createFilmCards() {
 
             const img = document.createElement("img");
             img.classList.add("poster");
-            img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+            
+            // Essayer de récupérer l'image depuis OMDb
+            fetch(`/api/poster?title=${encodeURIComponent(filmTitle)}`).then(response => {
+                if (response.ok) {
+                    return response.json();
+                } else {
+                    throw new Error("Erreur lors de la récupération de l'affiche.");
+                }
+            }).then(data => {
+                // Make a HEAD request to check if the image exists
+                fetch(data, { method: 'HEAD' })
+                    .then(headResponse => {
+                        if (headResponse.ok) {
+                            img.src = data;
+                        } else {
+                            // Image par défaut si l'URL n'est pas valide
+                            img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+                        }
+                    }
+                ).catch(() => {
+                    // Image par défaut en cas d'erreur
+                    img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+                });
+            }).catch(error => {
+                console.error("Erreur lors de la récupération de l'affiche :", error);
+                // Image par défaut si échec
+                img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+            });
+
+            // Si pas d'image dispo, mettre une image aléatoire
+            if (!img.src || img.src === "N/A")
+                img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
 
             // Affichage de la carte
             const info = document.createElement("div");
@@ -168,8 +197,48 @@ function getRandomFilm(category, card) {
     const list = filmsByCategory[category] || [];
     if (list.length === 0) return null;
     const randomIndex = Math.floor(Math.random() * list.length);
+    const filmTitle = list[randomIndex];
     const img = card.querySelector(".poster");
-    img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+    // Essayer de récupérer l'image depuis OMDb
+    fetch(`/api/poster?title=${encodeURIComponent(filmTitle)}`)
+    .then((response) => {
+        if (response.ok) {
+          return response.json();
+        } else {
+            throw new Error(
+              "Erreur lors de la récupération de l'affiche.",
+            );
+        }
+    })
+    .then((data) => {
+    // Make a HEAD request to check if the image exists
+    fetch(data, { method: "HEAD" })
+        .then((headResponse) => {
+            if (headResponse.ok) {
+                img.src = data;
+            } else {
+                // Image par défaut si l'URL n'est pas valide
+                img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+            }
+        })
+        .catch(() => {
+            // Image par défaut en cas d'erreur
+            img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+        });
+    })
+    .catch((error) => {
+        console.error(
+            "Erreur lors de la récupération de l'affiche :",
+            error,
+        );
+        // Image par défaut si échec
+        img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+    });
+
+    // Si pas d'image dispo, mettre une image aléatoire
+    if (!img.src || img.src === "N/A")
+        img.src = `https://picsum.photos/800/400?random=${Math.random()}`;
+    
     return list[randomIndex];
 }
 

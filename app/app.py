@@ -3,7 +3,12 @@ from flask_cors import CORS
 from SPARQLWrapper import SPARQLWrapper, JSON, GET
 
 from reco_profile import get_reco
-from utils import convertSPARQLOutputToDico, keepTopNResults
+from utils import convertSPARQLOutputToDico, keepTopNResults, get_movie_data_omdb
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+OMDB_API_KEY = os.getenv("OMDB_API_KEY")
 
 recommendations_cache = {}  # Dictionnaire pour stocker les recommandations en cache
 
@@ -21,8 +26,6 @@ def recommendations():
 
 @app.route('/sparql', methods=['GET'])
 def query_sparql():
-    #print("Received SPARQL query request: ", request.args)
-    
     # Récupération de la requête passée en paramètre d'URL
     query = request.args.get('query')
     
@@ -51,12 +54,24 @@ def get_recommandations():
         user_profil = request.json.get('profil')
         print("Received user profile:", user_profil)
         uid = request.json.get('uid')
-        # Appel de votre fonction Python locale
         recommendations = get_reco(user_profil, query="default", test=False)
         recommendations_cache[uid] = recommendations  # Stockage des recommandations dans le cache
         return jsonify(recommendations), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+@app.route('/api/poster', methods=['GET'])
+def get_poster():
+    movie_title = request.args.get('title')
+    if not movie_title:
+        return jsonify({"error": "No movie title provided"}), 400
+
+    movie_data = get_movie_data_omdb(movie_title, OMDB_API_KEY)
+    poster_url = movie_data.get("poster_url") if movie_data else None
+    if poster_url:
+        return jsonify(poster_url), 200
+    else:
+        return jsonify({"error": "Poster not found"}), 404
 
 if __name__ == "__main__":
     app.run(

@@ -1,10 +1,5 @@
 import requests
 
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-OMDB_API_KEY = os.getenv("OMDB_API_KEY")
 
 def removePathPrefix(uri):
     prefixe = "http://dbpedia.org/resource/"
@@ -21,28 +16,46 @@ def convertSPARQLOutputToDico(results):
     dico_films_descriptions = {}
     dico = {"results": {"bindings": {"genres": dico_genres_films, "films": dico_films_descriptions}}}
 
+    # The film name is unique, we must join information from multiple rows
     for row in results["results"]["bindings"]:
         film = row.get("film", {}).get("value", "N/A")
         genre = row.get("genre", {}).get("value", "N/A")
         description = row.get("description", {}).get("value", "N/A")
         starring = row.get("starring", {}).get("value", "N/A")
         director = row.get("director", {}).get("value", "N/A")
-        #image = row.get("image", {}).get("value", "N/A")
-        
+
         film_clean = removePathPrefix(film)
         genre_clean = genre
         description_clean = removePathPrefix(description)
         starring_clean = removePathPrefix(starring)
         director_clean = removePathPrefix(director)
-        image_clean = removePathPrefix(image)
 
-        if image_clean == "N/A":
-            image_clean = get_movie_data_omdb(film_clean, OMDB_API_KEY)["poster_url"] if get_movie_data_omdb(film_clean, OMDB_API_KEY) else "N/A"
+        # Fix naming formats for better readability
+        film_clean = film_clean.replace("_", " ")
+        description_clean = description_clean.replace("_", " ")
+        starring_clean = starring_clean.replace("_", " ")
+        director_clean = director_clean.replace("_", " ")
 
+        # Remove parentheses from film titles
+        if "(" in film_clean:
+            film_clean = film_clean.split("(")[0].strip()
+
+        # Merge duplicates: if film already exists, update info
+        if film_clean in dico_films_descriptions:
+            if starring_clean not in dico_films_descriptions[film_clean]["starring"]:
+                dico_films_descriptions[film_clean]["starring"].append(starring_clean)
+            if dico_films_descriptions[film_clean]["director"] == "N/A" and director_clean != "N/A":
+                dico_films_descriptions[film_clean]["director"] = director_clean
+            if dico_films_descriptions[film_clean]["description"] == "N/A" and description_clean != "N/A":
+                dico_films_descriptions[film_clean]["description"] = description_clean
+        else:
+            dico_films_descriptions[film_clean] = {
+                "description": description_clean,
+                "starring": [starring_clean],
+                "director": director_clean,
+            }
         dico_genres_films.setdefault(genre_clean, []).append(film_clean)
-        dico_films_descriptions.setdefault(film_clean, {"description": description_clean, "starring": [], "director": director_clean, "image": image_clean})
-        dico_films_descriptions[film_clean]["starring"].append(starring_clean)
-    
+
     return dico
 
 def keepTopNResults(results, N):
@@ -58,8 +71,6 @@ def get_movie_data_omdb(movie_title, api_key):
     # L'URL de base d'OMDb
     url = "http://www.omdbapi.com/"
 
-    url_poster = "http://img.omdbapi.com/"
-    
     # Paramètres : 't' pour le titre, 'apikey' pour votre clé
     params = {
         "t": movie_title,
@@ -79,7 +90,7 @@ def get_movie_data_omdb(movie_title, api_key):
                 "imdb_id": data.get("imdbID")
             }
         else:
-            print(f"Erreur OMDb : {data.get('Error')}")
+            print(f"Erreur OMDb pour le film \'{movie_title}\': {data.get('Error')}")
             return None
             
     except Exception as e:
