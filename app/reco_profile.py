@@ -107,17 +107,17 @@ def get_reco(profil, query ="default", test=False):
 
         
         for acteur in liste_dacteurs:
-            acteur = acteur.replace("http://dbpedia.org/resource/", "dbr:" )
+            #acteur = acteur.replace("http://dbpedia.org/resource/", "dbr:" )
             if(acteur in profil.get("acteurs").keys()):
                 score += profil.get("acteurs").get(acteur)
 
         for real in liste_de_reals:
-            real = real.replace("http://dbpedia.org/resource/", "dbr:" )
+            #real = real.replace("http://dbpedia.org/resource/", "dbr:" )
             if(real in profil.get("realisateurs").keys()):
                 score += profil.get("realisateurs").get(real)
 
         for genre in liste_de_genres:
-            genre = genre.replace("http://dbpedia.org/resource/", "dbr:" )
+            #genre = genre.replace("http://dbpedia.org/resource/", "dbr:" )
             if(genre in profil.get("genres").keys()):
                 score += profil.get("genres").get(genre)
         
