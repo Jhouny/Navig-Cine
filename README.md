@@ -3,9 +3,12 @@ This system is an application of knowledge graphs for movie recommendation and e
 
 ## Running the Application
 
-### Launch Local GraphDB Server
+### Launch Local GraphDB Server (Windows)
 
 - Launch Docker : `docker compose up --build -d`
+- Access Docker ID and State : `docker ps -a`
+- Stop docker : `docker stop <ID_Docker>`
+- Start docker : `docker start <ID_Docker>`
 
 ### Launch Frontend Flask Server
 
