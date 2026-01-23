@@ -46,9 +46,14 @@ async function createFilmCards() {
         }
 
         // Créer la section pour chacune des catégories
+        const block = document.createElement("div");
+
+        const header = document.createElement("h2");
+        header.textContent = category;
+        block.appendChild(header);
+
         const row = document.createElement("section");
         row.classList.add("film-row");
-
         // on prend 2 films par ligne pour l'affichage
 
 
@@ -127,7 +132,8 @@ async function createFilmCards() {
             row.appendChild(card);
         });
 
-        filmList.appendChild(row);
+        block.appendChild(row);
+        filmList.appendChild(block);
     });
     initializeFilmCards();
 

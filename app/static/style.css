@@ -147,3 +147,10 @@ header h1 {
 .recommendation-list > .film-card {
     margin-bottom: 30px;
 }
+
+.film-list >  div > h2 {
+    margin-bottom: 20px;
+    font-size: 2rem;
+    color: var(--accent);
+    text-align: center;
+}
