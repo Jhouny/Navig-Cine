@@ -1,6 +1,7 @@
 from SPARQLWrapper import SPARQLWrapper, JSON
 import heapq
 from openai import OpenAI
+from random import random
 
 def requete_sparql(requete_naturelle):
         
@@ -29,16 +30,16 @@ def get_reco_par_requete_naturelle(profil, requete_naturelle):
     reco = get_reco(profil, query =ma_requete_sparql)
     return reco
 
-def get_reco(profil, query ="default", test=False):
+def get_reco(profil, query ="default", test=False, randomfactor = 0):
 
     #print(f'-------- into get_reco\nprofil envoyé : {profil}')
     genres = profil.get("genres")
     realisateurs = profil.get("realisateurs")
     acteurs = profil.get("acteurs")
 
-    string_de_genres = ", ".join(f"<{g}>" for g in genres.keys())
-    string_de_realisateurs = ", ".join(f"<{g}>" for g in realisateurs.keys())
-    string_dacteurs = ", ".join(f"<{g}>" for g in acteurs.keys())
+    string_de_genres = ", ".join(f"<http://dbpedia.org/resource/{g}>".replace(" ", "_" ) for g in genres.keys())
+    string_de_realisateurs = ", ".join(f"<http://dbpedia.org/resource/{g}>".replace(" ", "_" ) for g in realisateurs.keys())
+    string_dacteurs = ", ".join(f"<http://dbpedia.org/resource/{g}>".replace(" ", "_" ) for g in acteurs.keys())
   
     if (query == "default"):
         query = f"""
@@ -106,7 +107,7 @@ def get_reco(profil, query ="default", test=False):
         for acteur in liste_dacteurs:
             #acteur = acteur.replace("http://dbpedia.org/resource/", "dbr:" )
             if(acteur in profil.get("acteurs").keys()):
-                score += profil.get("acteurs").get(acteur)
+                score += profil.get("acteurs").get(acteur) + randomfactor*random()
 
         for real in liste_de_reals:
             #real = real.replace("http://dbpedia.org/resource/", "dbr:" )
