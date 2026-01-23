@@ -64,12 +64,12 @@ def get_reco(profil, query ="default", test=False, randomfactor = 0):
         """
     
     if (not test) :
-        print(f'---this is not a test\n---query : \n{query}')
+        #print(f'---this is not a test\n---query : \n{query}')
         sparql = SPARQLWrapper("http://127.0.0.1:7201/repositories/Gdb-Navig-Cine")
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
-        #print(f'---reuslts : \n{results["results"]["bindings"]}')
+        #print(f'---relts : \n{results["results"]["bindings"]}')
     else :
         results = {
                     "results": {
@@ -114,12 +114,12 @@ def get_reco(profil, query ="default", test=False, randomfactor = 0):
         for real in liste_de_reals:
             #real = real.replace("http://dbpedia.org/resource/", "dbr:" )
             if(real in profil.get("realisateurs").keys()):
-                score += profil.get("realisateurs").get(real)
+                score += profil.get("realisateurs").get(real) + randomfactor*random()
 
         for genre in liste_de_genres:
             #genre = genre.replace("http://dbpedia.org/resource/", "dbr:" )
             if(genre in profil.get("genres").keys()):
-                score += profil.get("genres").get(genre)
+                score += profil.get("genres").get(genre) + randomfactor*random()
         
         heapq.heappush(data_priorQ, (-score, i, {
             "Film": result.get("film", {}).get("value", "N/A"),
@@ -176,5 +176,5 @@ if __name__ == "__main__":
                     'dbr:Jessica_Tuck' : 2}
             }
     requete_naturelle = "les films réalisés par Blair Treu"
-    df_reco = get_reco(profil)
+    df_reco = get_reco_par_requete_naturelle(profil, requete_naturelle)
     print(df_reco)

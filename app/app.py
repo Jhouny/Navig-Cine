@@ -54,7 +54,7 @@ def get_recommandations():
         user_profil = request.json.get('profil')
         print("Received user profile:", user_profil)
         uid = request.json.get('uid')
-        recommendations = get_reco(user_profil, query="default", test=False)
+        recommendations = get_reco(user_profil, query="default", test=False,randomfactor=5)
         recommendations_cache[uid] = recommendations  # Stockage des recommandations dans le cache
         return jsonify(recommendations), 200
     except Exception as e:
