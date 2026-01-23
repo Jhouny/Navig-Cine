@@ -341,7 +341,7 @@ function sendRatings() {
     console.log("Profil utilisateur :", userProfil);
 
     getRecommendations(userProfil, uid);
-    alert("Recommandations en cours de calcul...");
+    
     // Attendre quelques secondes avant de rediriger
     setTimeout(() => {
         console.log("Redirection vers la page des recommandations...");
