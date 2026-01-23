@@ -11,6 +11,8 @@ filmsByCategory = {
 filmsInfos = {
 };
 
+const addedFilms = new Set();
+
 // Les films seront récupérés dans le serveur GraphDB
 
 async function createFilmCards() {
@@ -141,12 +143,12 @@ function getUnusedFilmFromCategory(category) {
     if (available.length === 0) return null;
 
     const idx = Math.floor(Math.random() * available.length);
+    addedFilms.add(available[idx]);
     return available[idx];
 }
 
 function isFilmAlreadyAdded(filmTitle) {
-    return [...document.querySelectorAll(".film-card")]
-        .some(card => card.dataset.film === filmTitle);
+    return addedFilms.has(filmTitle);
 }
 
 async function initializeFilmCards() {
