@@ -111,6 +111,22 @@ async function createFilmCards() {
 
             const p = document.createElement("p");
             p.textContent = filmsInfos[filmTitle]["description"] || "Description indisponible.";
+            if (filmsInfos[filmTitle]["description"] === "N/A") {
+                fetch(`/api/description?title=${encodeURIComponent(filmTitle)}`)
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error("Erreur lors de la récupération de la description.");
+                    }
+                })
+                .then(data => {
+                    p.textContent = data || "";
+                })
+                .catch(error => {
+                    console.error("Erreur lors de la récupération de la description :", error);
+                });
+            }
 
             // Boutons (like, dislike)
             const actions = document.createElement("div");
