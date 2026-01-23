@@ -25,7 +25,7 @@ def convertSPARQLOutputToDico(results):
         director = row.get("director", {}).get("value", "N/A")
 
         film_clean = removePathPrefix(film)
-        genre_clean = genre
+        genre_clean = removePathPrefix(genre)
         description_clean = removePathPrefix(description)
         starring_clean = removePathPrefix(starring)
         director_clean = removePathPrefix(director)
