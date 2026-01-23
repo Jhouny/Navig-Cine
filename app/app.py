@@ -9,6 +9,8 @@ import os
 
 load_dotenv()
 OMDB_API_KEY = os.getenv("OMDB_API_KEY")
+base_url = os.getenv("BASE_URL", "localhost:7200")
+print("Using base URL for SPARQL endpoint:", base_url)
 
 recommendations_cache = {}  # Dictionnaire pour stocker les recommandations en cache
 
@@ -32,7 +34,7 @@ def query_sparql():
     if not query:
         return jsonify({"error": "No query provided"}), 400
 
-    sparql = SPARQLWrapper("http://127.0.0.1:7201/repositories/Gdb-Navig-Cine")
+    sparql = SPARQLWrapper(f"http://{base_url}/repositories/Gdb-Navig-Cine")
     sparql.setMethod(GET)
     sparql.setQuery(query)
     sparql.setReturnFormat(JSON)
