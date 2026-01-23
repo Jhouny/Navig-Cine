@@ -11,6 +11,8 @@ filmsByCategory = {
 filmsInfos = {
 };
 
+const addedFilms = new Set();
+
 // Les films seront récupérés dans le serveur GraphDB
 
 async function createFilmCards() {
@@ -141,12 +143,12 @@ function getUnusedFilmFromCategory(category) {
     if (available.length === 0) return null;
 
     const idx = Math.floor(Math.random() * available.length);
+    addedFilms.add(available[idx]);
     return available[idx];
 }
 
 function isFilmAlreadyAdded(filmTitle) {
-    return [...document.querySelectorAll(".film-card")]
-        .some(card => card.dataset.film === filmTitle);
+    return addedFilms.has(filmTitle);
 }
 
 async function initializeFilmCards() {
@@ -333,8 +335,12 @@ function sendRatings() {
     console.log("Profil utilisateur :", userProfil);
 
     getRecommendations(userProfil, uid);
-
-    window.location.href = `/recommendations?uid=` + encodeURIComponent(uid);
+    alert("Recommandations en cours de calcul...");
+    // Attendre quelques secondes avant de rediriger
+    setTimeout(() => {
+        console.log("Redirection vers la page des recommandations...");
+        window.location.href = `/recommendations?uid=` + encodeURIComponent(uid);
+    }, 3000);
 }
 
 function isValidValue(v) {
