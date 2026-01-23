@@ -1,5 +1,25 @@
 import requests
 
+def description_par_llm(film_title):
+        
+    # Initialize the client
+    client = OpenAI(
+        base_url="https://ollama-ui.pagoda.liris.cnrs.fr/api",  
+        api_key="sk-35729c1f15074008972ee602959d9f7b",         #   (go to profile - bottom left, account)
+    )
+
+    # Call the 70B model
+    response = client.chat.completions.create(
+        model="llama3:70b",
+        messages=[
+            {"role": "system", "content": "donne moi une description de 20 mots pour le film qui a pour titre : "},
+            {"role": "user", "content": film_title}
+        ],
+        temperature=0.7
+    )
+
+    description = response.choices[0].message.content
+    return description
 
 def removePathPrefix(uri):
     prefixe = "http://dbpedia.org/resource/"

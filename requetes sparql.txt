@@ -1,11 +1,12 @@
 ﻿
 
-profil = {
-'Films' : {},
-'genres' : {'dbr:Fantasy_comedy':10},
- 'realisateurs' : {'dbr:David_Frankel' : 2, 'dbr:James_Cameron' : 1},
- 'acteurs' : {'dbr:Anne_Hathaway':1, 'dbr:Tom_Cruise':1, 'dbr:Meryl_Streep':4}
- }
+profil = 
+{
+  'Films' : {},
+  'genres' : {'Fantasy comedy':10},
+  'realisateurs' : {'David Frankel' : 2, 'James Cameron' : 1},
+  'acteurs' : {'Anne Hathaway':1, 'Tom Cruise':1, 'Meryl Streep':4}
+}
 
 
 *********************par titre*********************************
