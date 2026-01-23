@@ -112,6 +112,7 @@ def get_movie_data_omdb(movie_title, api_key):
             return {
                 "title": data.get("Title"),
                 "year": data.get("Year"),
+                "plot": data.get("Plot"),
                 "poster_url": data.get("Poster"), # L'URL de l'image
                 "imdb_id": data.get("imdbID")
             }

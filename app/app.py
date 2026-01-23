@@ -75,6 +75,19 @@ def get_poster():
     else:
         return jsonify({"error": "Poster not found"}), 404
 
+@app.route('/api/description', methods=['GET'])
+def get_description():
+    movie_title = request.args.get('title')
+    if not movie_title:
+        return jsonify({"error": "No movie title provided"}), 400
+
+    movie_data = get_movie_data_omdb(movie_title, OMDB_API_KEY)
+    description = movie_data.get("plot") if movie_data else None
+    if description:
+        return jsonify(description), 200
+    else:
+        return jsonify({"error": "Description not found"}), 404
+
 if __name__ == "__main__":
     app.run(
         host="0.0.0.0",
