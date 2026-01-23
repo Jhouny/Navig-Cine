@@ -1,5 +1,5 @@
 import requests
-
+import random as r
 
 def removePathPrefix(uri):
     prefixe = "http://dbpedia.org/resource/"
@@ -62,7 +62,12 @@ def keepTopNResults(results, N):
 
     # Garder uniquement les 5 genres avec les plus de films
     sorted_genres = sorted(results["results"]["bindings"]["genres"].items(), key=lambda item: len(item[1]), reverse=True)
-    topN_genres = dict(sorted_genres[:N])
+    idx = r.randint(0, 2*N)
+    topN_genres = dict()
+
+    for i in range (0, N):
+        topN_genres[sorted_genres[i+idx][0]] = sorted_genres[i+idx][1]
+    
     results["results"]["bindings"]["genres"] = topN_genres
 
     return results
