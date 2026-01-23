@@ -32,11 +32,12 @@ def get_reco_par_requete_naturelle(profil, requete_naturelle):
 
 def get_reco(profil, query ="default", test=False, randomfactor = 0):
 
-    #print(f'-------- into get_reco\nprofil envoyé : {profil}')
+    #print(f'-------- into get_reco\nprofil envoyé : {profil}\n test : {test}')
     genres = profil.get("genres")
     realisateurs = profil.get("realisateurs")
     acteurs = profil.get("acteurs")
 
+    # concatenate, add prefix and replace splace with underlines
     string_de_genres = ", ".join(f"<http://dbpedia.org/resource/{g}>".replace(" ", "_" ) for g in genres.keys())
     string_de_realisateurs = ", ".join(f"<http://dbpedia.org/resource/{g}>".replace(" ", "_" ) for g in realisateurs.keys())
     string_dacteurs = ", ".join(f"<http://dbpedia.org/resource/{g}>".replace(" ", "_" ) for g in acteurs.keys())
@@ -44,7 +45,6 @@ def get_reco(profil, query ="default", test=False, randomfactor = 0):
     if (query == "default"):
         query = f"""
         PREFIX dbo: <http://dbpedia.org/ontology/>
-        PREFIX dbr: <http://dbpedia.org/resource/>
 
         SELECT ?film 
         (GROUP_CONCAT(DISTINCT ?director; separator=", ") AS ?directors) 
@@ -64,10 +64,12 @@ def get_reco(profil, query ="default", test=False, randomfactor = 0):
         """
     
     if (not test) :
+        print(f'---this is not a test\n---query : \n{query}')
         sparql = SPARQLWrapper("http://127.0.0.1:7201/repositories/Gdb-Navig-Cine")
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
         results = sparql.query().convert()
+        #print(f'---reuslts : \n{results["results"]["bindings"]}')
     else :
         results = {
                     "results": {
