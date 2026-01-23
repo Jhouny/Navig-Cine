@@ -2,6 +2,7 @@ from SPARQLWrapper import SPARQLWrapper, JSON
 import heapq
 from openai import OpenAI
 from random import random
+import utils
 
 def requete_sparql(requete_naturelle):
         
@@ -32,7 +33,7 @@ def get_reco_par_requete_naturelle(profil, requete_naturelle):
 
 def get_reco(profil, query ="default", test=False, randomfactor = 0):
 
-    #print(f'-------- into get_reco\nprofil envoyé : {profil}\n test : {test}')
+    print(f'-------- get_reco\nprofil envoyé : {profil}')
     genres = profil.get("genres")
     realisateurs = profil.get("realisateurs")
     acteurs = profil.get("acteurs")
@@ -62,7 +63,7 @@ def get_reco(profil, query ="default", test=False, randomfactor = 0):
         }}}}
         GROUP BY ?film
         """
-    
+
     if (not test) :
         #print(f'---this is not a test\n---query : \n{query}')
         sparql = SPARQLWrapper("http://127.0.0.1:7201/repositories/Gdb-Navig-Cine")
@@ -108,18 +109,19 @@ def get_reco(profil, query ="default", test=False, randomfactor = 0):
         
         for acteur in liste_dacteurs:
             #acteur = acteur.replace("http://dbpedia.org/resource/", "dbr:" )
-            if(acteur in profil.get("acteurs").keys()):
-                score += profil.get("acteurs").get(acteur) + randomfactor*random()
+            #print(f'{utils.removePathPrefix(acteur).replace("_"," ")} in {profil.get("acteurs").keys()}')
+            if(utils.removePathPrefix(acteur).replace('_',' ') in profil.get("acteurs").keys()):
+                score += (profil.get("acteurs").get(utils.removePathPrefix(acteur).replace("_"," ")) + randomfactor*random())
 
         for real in liste_de_reals:
             #real = real.replace("http://dbpedia.org/resource/", "dbr:" )
-            if(real in profil.get("realisateurs").keys()):
-                score += profil.get("realisateurs").get(real) + randomfactor*random()
+            if(utils.removePathPrefix(real).replace('_',' ') in profil.get("realisateurs").keys()):
+                score += (profil.get("realisateurs").get(utils.removePathPrefix(real).replace("_"," ")) + randomfactor*random())
 
         for genre in liste_de_genres:
             #genre = genre.replace("http://dbpedia.org/resource/", "dbr:" )
-            if(genre in profil.get("genres").keys()):
-                score += profil.get("genres").get(genre) + randomfactor*random()
+            if(utils.removePathPrefix(genre).replace('_',' ') in profil.get("genres").keys()):
+                score += (profil.get("genres").get(utils.removePathPrefix(genre).replace("_"," ")) + randomfactor*random())
         
         heapq.heappush(data_priorQ, (-score, i, {
             "Film": result.get("film", {}).get("value", "N/A"),
@@ -134,7 +136,7 @@ def get_reco(profil, query ="default", test=False, randomfactor = 0):
     while data_priorQ :
         task = heapq.heappop(data_priorQ)[2]
         res.append(task)
-            
+
     # Remove dbpedia prefixes
     for r in res:
         r["Film"] = r["Film"].replace("http://dbpedia.org/resource/", "")
@@ -165,16 +167,11 @@ def get_reco(profil, query ="default", test=False, randomfactor = 0):
 if __name__ == "__main__":
     # Lancement de la requête
     profil = {
-        'Films' : {},
-        'genres' : {'dbr:Science_fiction':10}, 
-        'realisateurs' : {'dbr:David_Frankel' : 2, 
-                        'dbr:James_Cameron' : 1, 
-                        'dbr:Christopher_Nolan' : 11},
-        'acteurs' : {'dbr:Anne_Hathaway':1, 
-                    'dbr:Tom_Cruise':1, 
-                    'dbr:Meryl_Streep':4, 
-                    'dbr:Jessica_Tuck' : 2}
-            }
+    'Films': {'Shadow of Heroes': 1, 'Vlastně se nic nestalo': 1, 'Earth to America': 1, 'Fred: The Movie': 1, 'Goli Soda Rising': 1, 'Final Run': 1, 'Harlan County War': 1, 'Beaches': 1, 'Fascist Legacy': 1, 'Boom Bust Boom': 1}, 
+    'genres': {'Drama': 2, 'Comedy': 2, 'Action_film': 2, 'Drama_(film_and_television)': 2, 'Documentary_film': 2}, 
+    'realisateurs': {'Clay Weiner': 1}, 
+    'acteurs': {'John Cena': 1, 'Lucas Cruikshank': 1, 'Jake Weary': 1, 'Pixie Lott': 1, 'Jennette McCurdy': 1, 'Oscar Nunez': 1, 'Siobhan Fallon Hogan': 1}
+    }
     requete_naturelle = "les films réalisés par Blair Treu"
-    df_reco = get_reco_par_requete_naturelle(profil, requete_naturelle)
+    df_reco = get_reco(profil, randomfactor=5)
     print(df_reco)
