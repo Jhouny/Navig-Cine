@@ -16,8 +16,7 @@ def requete_sparql(requete_naturelle):
     response = client.chat.completions.create(
         model="llama3:70b",
         messages=[
-            {"role": "system", "content": "Tu es un traducteur de requêtes plein texte vers SPARQL. \
-             Tu utilises un graphe qui contient uniquement ?film dbo:director ?director, ?film dbo:starring ?actor, ?film dbo:genre ?genre et ?film dbo:description ?description. Tu connais des éléments de modèle suivant : <http://dbpedia.org/resource/Comedy>. La requete doit repourner : ?film l'url du film, ?directors la liste des uri des realisateurs séparés par une virgule et un espace, ?genres la liste des uri des genres séparés par une virgule et un espace et ?actors liste des uri des acteurs séparés par une virgule et un espace. Tu ne dois répondre qu'en SPARQL, aucun texte, aucune explication en sus."},
+            {"role": "system", "content": "Tu es un traducteur de requêtes plein texte vers SPARQL. Tu utilises un graphe qui contient uniquement ?film dbo:director ?director, ?film dbo:starring ?actor, ?film dbo:genre ?genre et ?film dbo:description ?description. Tu connais des éléments de modèle suivant : <http://dbpedia.org/resource/Comedy>. La requete doit repourner : ?film l'url du film, ?directors la liste des uri des realisateurs séparés par une virgule et un espace, ?genres la liste des uri des genres séparés par une virgule et un espace et ?actors liste des uri des acteurs séparés par une virgule et un espace. Tu ne dois répondre qu'en SPARQL, aucun texte, aucune explication en sus."},
             {"role": "user", "content": requete_naturelle}
         ],
         temperature=0.7
@@ -65,7 +64,7 @@ def get_reco(profil, query ="default", test=False, randomfactor = 0):
         """
 
     if (not test) :
-        #print(f'---this is not a test\n---query : \n{query}')
+        print(f'---querying : \n{query}')
         sparql = SPARQLWrapper("http://127.0.0.1:7201/repositories/Gdb-Navig-Cine")
         sparql.setQuery(query)
         sparql.setReturnFormat(JSON)
@@ -170,8 +169,9 @@ if __name__ == "__main__":
     'Films': {'Shadow of Heroes': 1, 'Vlastně se nic nestalo': 1, 'Earth to America': 1, 'Fred: The Movie': 1, 'Goli Soda Rising': 1, 'Final Run': 1, 'Harlan County War': 1, 'Beaches': 1, 'Fascist Legacy': 1, 'Boom Bust Boom': 1}, 
     'genres': {'Drama': 2, 'Comedy': 2, 'Action_film': 2, 'Drama_(film_and_television)': 2, 'Documentary_film': 2}, 
     'realisateurs': {'Clay Weiner': 1}, 
-    'acteurs': {'John Cena': 1, 'Lucas Cruikshank': 1, 'Jake Weary': 1, 'Pixie Lott': 1, 'Jennette McCurdy': 1, 'Oscar Nunez': 1, 'Siobhan Fallon Hogan': 1}
+    'acteurs': {'Aurora Miranda':2, 'John Cena': 1, 'Lucas Cruikshank': 1, 'Jake Weary': 1, 'The Mellomen':1, 'Pixie Lott': 1, 'Jennette McCurdy': 1, 'Oscar Nunez': 1, 'Siobhan Fallon Hogan': 1}
     }
-    requete_naturelle = "les films réalisés par Blair Treu"
-    df_reco = get_reco(profil, randomfactor=5)
-    print(df_reco)
+    requete_naturelle = "les films réalisés par Jack Kinney"
+
+    df_reco = get_reco(profil)
+    print(df_reco[0:5])

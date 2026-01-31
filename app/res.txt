@@ -1,0 +1,50 @@
+profil = {
+        'Films': {'Shadow of Heroes': 1, 'Vlastně se nic nestalo': 1, 'Earth to America': 1, 'Fred: The Movie': 1, 'Goli Soda Rising': 1, 'Final Run': 1, 'Harlan County War': 1, 'Beaches': 1, 'Fascist Legacy': 1, 'Boom Bust Boom': 1}, 
+        'genres': {'Drama': 2, 'Comedy': 2, 'Action_film': 2, 'Drama_(film_and_television)': 2, 'Documentary_film': 2}, 
+        'realisateurs': {'Clay Weiner': 1}, 
+        'acteurs': {'Aurora Miranda':2, 'John Cena': 1, 'Lucas Cruikshank': 1, 'Jake Weary': 1, 'The Mellomen':1, 'Pixie Lott': 1, 'Jennette McCurdy': 1, 'Oscar Nunez': 1, 'Siobhan Fallon Hogan': 1}
+    }
+    
+reco simple : 
+[
+    {
+        'Film': 'Fred: The Movie', 
+        'Realisateurs': ['Clay Weiner'], 
+        'Acteurs': ['John Cena', 'Lucas Cruikshank', 'Jake Weary', 'Pixie Lott', 'Jennette McCurdy', 'Oscar Nunez', 'Siobhan Fallon Hogan'], 
+        'Genres': ['Comedy'], 
+        'Score': 10.0
+    }, {
+        'Film': 'Dino Ki Dulhaniya', 
+        'Realisateurs': [], 
+        'Acteurs': [], 
+        'Genres': ['Drama', 'Comedy'], 'Score': 4.0
+    }, {
+        'Film': 'Adikts', 
+        'Realisateurs': [], 
+        'Acteurs': [], 
+        'Genres': ['Drama', 'Comedy'], 
+        'Score': 4.0
+    }, ...
+]
+
+reco LLM ("les films réalisés par Jabbar")
+[
+    {
+        'Film': 'The Three Caballeros', 
+        'Realisateurs': ['Jack Kinney'], 
+        'Acteurs': ['Clarence Nash', 'José do Patrocínio Oliveira', 'Aurora Miranda', 'Dora Luz', 'Joaquin Garay', 'Carmen Molina (actress)'], 
+        'Genres': [], 
+        'Score': 2.0
+    }, {
+        'Film': 'Pigs Is Pigs (1954 film)  Pigs Is Pigs  1', 
+        'Realisateurs': ['Jack Kinney'], 
+        'Acteurs': ['Bill Thompson (voice actor)', 'Dallas McKennon', 'Rhys Williams (Welsh actor)', 'The Mellomen'], 
+        'Genres': [], 
+        'Score': 1.0
+    }, {
+        'Film': 'The Adventures of Ichabod and Mr. Toad', 
+        'Realisateurs': ['Jack Kinney'], 
+        'Acteurs': ['Eric Blore', 'Claud Allister', 'Judd Conlon', "J. Pat O'Malley"], 
+        'Genres': [], 'Score': 0
+        }, ...
+]
